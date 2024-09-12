@@ -23,7 +23,7 @@
       </div>
 
       <button
-        class="mt-16"
+      class="mt-16"
         type="button"
         :disabled="!isActivationFormValid || loading"
         :class="[
