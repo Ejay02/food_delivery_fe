@@ -1,18 +1,28 @@
 import gql from "graphql-tag";
 
-// export const registerUserMutation = gql`
-//   mutation register(registerInput: $registerDto) {
-//         activation_token
-//         error{
-//           message
-//         }
-//       }
-
-// `;
+export const registerMutation = gql`
+  mutation register(
+    $name: String!
+    $password: String!
+    $email: String!
+    $phone_number: Float!
+  ) {
+    register(
+      registerInput: {
+        name: $name
+        password: $password
+        email: $email
+        phone_number: $phone_number
+      }
+    ) {
+      activation_token
+    }
+  }
+`;
 
 export const loginMutation = gql`
-  mutation Login($email: String!, $password: String!) {
-    Login(email: $email, password: $password) {
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       user {
         id
         name

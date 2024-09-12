@@ -2,14 +2,11 @@
   <div
     v-if="isModalVisible"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
-    @click="closeModal"
+    @click.self="closeModal"
   >
-    <div
-      class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md"
-      @click.stop
-    >
+    <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
       <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
-      <form @submit.prevent="handleSubmit" class="space-y-4">
+      <form @submit.prevent="" class="space-y-4">
         <div>
           <label for="email" class="block mb-2 text-sm font-medium"
             >Email:</label
@@ -46,6 +43,7 @@
         </div>
 
         <button
+          @click="handleSubmit"
           type="submit"
           :disabled="!isFormValid"
           :class="[
@@ -89,6 +87,7 @@
         </p>
       </div>
     </div>
+
     <SignUpModal ref="signupModal" />
   </div>
 </template>
@@ -99,6 +98,10 @@ import SignUpModal from "./signupModal.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { loginMutation } from "../../graphql/mutations";
 import { useNotifications } from "../../composables/globalAlert";
+
+import { useUserStore } from "../../store/userStore";
+
+const userStore = useUserStore();
 
 const { notify } = useNotifications();
 
@@ -116,6 +119,14 @@ const closeModal = () => {
   password.value = "";
 };
 
+// const closeModal = (event) => {
+//   if (event.target === event.currentTarget) {
+//     isModalVisible.value = false;
+//     email.value = "";
+//     password.value = "";
+//   }
+// };
+
 const signupModal = ref(null);
 
 const showSignUpModal = () => {
@@ -126,12 +137,18 @@ const isFormValid = computed(() => {
   return email.value.trim() !== "" && password.value.trim() !== "";
 });
 const { mutate: login, error, loading } = useMutation(loginMutation);
-console.log("loading:", loading.value);
-console.log("error:", error.value);
 
 const handleSubmit = async () => {
   try {
-    const res = await login({ email: email.value, password: password.value });
+    const res = await login(
+      { email: email.value, password: password.value },
+      {
+        context: {
+          headers: userStore.setHeaders(),
+        },
+      }
+    );
+    userStore.setUser(res.data);
     notify("Login successful", "success");
     closeModal();
   } catch (error) {

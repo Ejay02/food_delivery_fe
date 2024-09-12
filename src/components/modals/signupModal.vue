@@ -9,7 +9,8 @@
       @click.stop
     >
       <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-      <form @submit.prevent="handleSubmit" class="space-y-4">
+      <form @submit.prevent="" class="space-y-4">
+        <!-- name -->
         <div>
           <label for="email" class="block mb-2 text-sm font-medium"
             >Name:</label
@@ -26,6 +27,7 @@
           />
         </div>
 
+        <!-- email -->
         <div>
           <label for="email" class="block mb-2 text-sm font-medium"
             >Email:</label
@@ -40,6 +42,7 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
+        <!-- password -->
         <div>
           <label for="password" class="block mb-2 text-sm font-medium"
             >Password:</label
@@ -54,6 +57,8 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
+
+        <!-- number -->
         <div>
           <label for="password" class="block mb-2 text-sm font-medium"
             >Phone Number:</label
@@ -68,9 +73,11 @@
           />
         </div>
 
+        <!-- submit -->
         <button
+          @click="handleSubmit"
           type="submit"
-          :disabled="!isFormValid"
+          :disabled="!isFormValid || loading"
           :class="[
             'w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
             isFormValid
@@ -113,12 +120,22 @@
       </div>
     </div>
     <LoginModal ref="loginModal" />
+    <ActivationModal ref="activationModal" />
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
 import LoginModal from "./loginModal.vue";
+import { useMutation } from "@vue/apollo-composable";
+import { registerMutation } from "../../graphql/mutations";
+import { useNotifications } from "../../composables/globalAlert";
+import { useUserStore } from "../../store/userStore";
+import ActivationModal from "./activationModal.vue";
+
+const userStore = useUserStore();
+
+const { notify } = useNotifications();
 
 const isModalVisible = ref(false);
 const name = ref("");
@@ -132,28 +149,49 @@ const showModal = () => {
 
 const closeModal = () => {
   isModalVisible.value = false;
+  name.value = "";
   email.value = "";
   password.value = "";
+  number.value = "";
 };
 
 const loginModal = ref(null);
+const activationModal = ref(null);
 
 const showLoginModal = () => {
   loginModal.value.showModal();
+};
+
+const showActivationModal = () => {
+  activationModal.value.showModal();
 };
 
 const isFormValid = computed(() => {
   return email.value.trim() !== "" && password.value.trim() !== "";
 });
 
+const { mutate: register, loading } = useMutation(registerMutation);
+
 const handleSubmit = async () => {
   try {
-    console.log("Login attempt with:", email.value, password.value);
-    // Implement your login logic here
-    closeModal();
+    const res = await register({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      phone_number: number.value,
+    });
+
+    if (res.data.register) {
+      const actToken = res.data.register.activation_token;
+
+      localStorage.setItem("activation_token", actToken);
+      notify("Please check your email to activate your account", "success");
+
+      closeModal();
+      showActivationModal();
+    }
   } catch (error) {
-    console.error("Login failed:", error);
-    // Handle login error (e.g., show error message)
+    notify("Registration failed", "error");
   }
 };
 
