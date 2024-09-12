@@ -6,6 +6,10 @@ const isDarkMode = useDarkMode();
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value;
 };
+
+import { provideModalManagement } from "./utils/modalManagement";
+
+provideModalManagement();
 </script>
 
 <template>
@@ -14,7 +18,7 @@ const toggleDarkMode = () => {
   >
     <button
       @click="toggleDarkMode"
-      class="p-2 bg-gray-200 dark:bg-gray-700 rounded fixed top-0 right-0 m-4"
+      class="p-2 bg-gray-200 dark:bg-gray-700 rounded fixed top-0 right-0 m-4 ml-4"
     >
       <!-- day -->
       <svg

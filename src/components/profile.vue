@@ -67,26 +67,26 @@
         </a-menu>
       </template>
     </a-dropdown>
+
     <!-- auth -->
-    <div v-else class="cursor-pointer" @click="showLoginModal">
+    <div v-else class="cursor-pointer" @click="openModal('login-modal')">
       <i class="fa-solid fa-circle-user mr-9"></i>
     </div>
 
-    <LoginModal ref="loginModal" />
+    <LoginModal />
+    <SignupModal />
+    <ActivationModal />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-// import { useUserStore } from "@/stores/user"; // Adjust the import path as needed
 import LoginModal from "./modals/loginModal.vue";
+import SignupModal from "./modals/signupModal.vue";
+import ActivationModal from "./modals/activationModal.vue";
 
-// const userStore = useUserStore();
-const loginModal = ref(null);
+import { useModalManagement } from "../utils/modalManagement";
 
-const showLoginModal = () => {
-  loginModal.value.showModal();
-};
+const { openModal } = useModalManagement();
 </script>
 
 <style scoped></style>

@@ -1,8 +1,8 @@
 <template>
   <div
-    v-if="isModalVisible"
+    v-if="isModalOpen('login-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
-    @click.self="closeModal"
+    @click.self="closeModal('login-modal')"
   >
     <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
       <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
@@ -80,44 +80,43 @@
           Need an account?
           <a
             href="#"
-            @click="showSignUpModal"
+            @click="switchToSignup"
             class="text-blue-500 hover:underline"
             >Sign up</a
           >
         </p>
       </div>
     </div>
-
-    <SignUpModal ref="signupModal" />
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
-import SignUpModal from "./signupModal.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { loginMutation } from "../../graphql/mutations";
 import { useNotifications } from "../../composables/globalAlert";
 
 import { useUserStore } from "../../store/userStore";
+import { useModalManagement } from "../../utils/modalManagement";
 
 const userStore = useUserStore();
 
 const { notify } = useNotifications();
 
-const isModalVisible = ref(false);
+const { openModal, closeModal, isModalOpen } = useModalManagement();
+
 const email = ref("");
 const password = ref("");
 
-const showModal = () => {
-  isModalVisible.value = true;
-};
+// const showModal = () => {
+//   openModal("login-modal");
+// };
 
-const closeModal = () => {
-  isModalVisible.value = false;
-  email.value = "";
-  password.value = "";
-};
+// const closeModal = () => {
+//   closeModal("login-modal");
+//   email.value = "";
+//   password.value = "";
+// };
 
 // const closeModal = (event) => {
 //   if (event.target === event.currentTarget) {
@@ -127,15 +126,17 @@ const closeModal = () => {
 //   }
 // };
 
-const signupModal = ref(null);
+// const signupModal = ref(null);
 
-const showSignUpModal = () => {
-  signupModal.value.showModal();
-};
+// const showSignUpModal = () => {
+//   closeModal("login-modal");
+//   openModal("signup-modal");
+// };
 
 const isFormValid = computed(() => {
   return email.value.trim() !== "" && password.value.trim() !== "";
 });
+
 const { mutate: login, error, loading } = useMutation(loginMutation);
 
 const handleSubmit = async () => {
@@ -150,10 +151,15 @@ const handleSubmit = async () => {
     );
     userStore.setUser(res.data);
     notify("Login successful", "success");
-    closeModal();
+    closeModal("login-modal");
   } catch (error) {
     notify("Login failed", "error");
   }
+};
+
+const switchToSignup = () => {
+  closeModal("login-modal");
+  openModal("signup-modal");
 };
 
 const loginWithGithub = () => {
@@ -176,5 +182,5 @@ const signUp = () => {
   // Implement sign up logic or navigation
 };
 
-defineExpose({ showModal, closeModal, isModalVisible });
+defineExpose({ handleSubmit });
 </script>

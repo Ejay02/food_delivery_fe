@@ -1,8 +1,8 @@
 <template>
   <div
-    v-if="isModalVisible"
+    v-if="isModalOpen('signup-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
-    @click="closeModal"
+    @click.self="closeModal('signup-modal')"
   >
     <div
       class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md"
@@ -112,59 +112,35 @@
           Have an account?
           <a
             href="#"
-            @click="showLoginModal"
+            @click="switchToLogin"
             class="text-blue-500 hover:underline"
             >Login</a
           >
         </p>
       </div>
     </div>
-    <LoginModal ref="loginModal" />
-    <ActivationModal ref="activationModal" />
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
-import LoginModal from "./loginModal.vue";
+
 import { useMutation } from "@vue/apollo-composable";
 import { registerMutation } from "../../graphql/mutations";
 import { useNotifications } from "../../composables/globalAlert";
 import { useUserStore } from "../../store/userStore";
-import ActivationModal from "./activationModal.vue";
+// import ActivationModal from "./activationModal.vue";
+import { useModalManagement } from "../../utils/modalManagement";
 
 const userStore = useUserStore();
 
 const { notify } = useNotifications();
+const { openModal, closeModal, isModalOpen } = useModalManagement();
 
-const isModalVisible = ref(false);
 const name = ref("");
 const email = ref("");
 const password = ref("");
 const number = ref("");
-
-const showModal = () => {
-  isModalVisible.value = true;
-};
-
-const closeModal = () => {
-  isModalVisible.value = false;
-  name.value = "";
-  email.value = "";
-  password.value = "";
-  number.value = "";
-};
-
-const loginModal = ref(null);
-const activationModal = ref(null);
-
-const showLoginModal = () => {
-  loginModal.value.showModal();
-};
-
-const showActivationModal = () => {
-  activationModal.value.showModal();
-};
 
 const isFormValid = computed(() => {
   return email.value.trim() !== "" && password.value.trim() !== "";
@@ -187,12 +163,17 @@ const handleSubmit = async () => {
       localStorage.setItem("activation_token", actToken);
       notify("Please check your email to activate your account", "success");
 
-      closeModal();
-      showActivationModal();
+      closeModal("signup-modal");
+      openModal("activation-modal");
     }
   } catch (error) {
     notify("Registration failed", "error");
   }
+};
+
+const switchToLogin = () => {
+  closeModal("signup-modal");
+  openModal("login-modal");
 };
 
 const loginWithGithub = () => {
@@ -215,5 +196,5 @@ const signUp = () => {
   // Implement sign up logic or navigation
 };
 
-defineExpose({ showModal, closeModal, isModalVisible });
+defineExpose({ handleSubmit });
 </script>
