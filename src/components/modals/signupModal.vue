@@ -1,4 +1,5 @@
 <template>
+  <LoadingScreen v-if="loading" />
   <div
     v-if="isModalOpen('signup-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
@@ -129,6 +130,7 @@ import { useUserStore } from "../../store/userStore";
 import { registerMutation } from "../../graphql/mutations";
 import { useNotifications } from "../../composables/globalAlert";
 import { useModalManagement } from "../../utils/modalManagement";
+import LoadingScreen from "../loadingScreen.vue";
 
 const userStore = useUserStore();
 
@@ -139,6 +141,13 @@ const name = ref("");
 const email = ref("");
 const password = ref("");
 const number = ref("");
+
+const resetForm = () => {
+  name.value = "";
+  email.value = "";
+  password.value = "";
+  number.value = "";
+};
 
 const isFormValid = computed(() => {
   return (
@@ -167,7 +176,7 @@ const handleSubmit = async () => {
       notify("Please check your email to activate your account", "success");
 
       closeModal("signup-modal");
-      // resetForm();
+      resetForm();
       openModal("activation-modal");
     }
   } catch (error) {
@@ -193,11 +202,6 @@ const loginWithGmail = () => {
 const forgotPassword = () => {
   console.log("Forgot password");
   // Implement forgot password logic
-};
-
-const signUp = () => {
-  console.log("Sign up");
-  // Implement sign up logic or navigation
 };
 
 defineExpose({ handleSubmit });

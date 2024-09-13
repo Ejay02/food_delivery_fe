@@ -3,7 +3,7 @@
     <section class="container text-center">
       <div class="content flex flex-col justify-center items-center">
         <div class="four_zero_four_text">
-          <h1 class="text-8xl text-black">404</h1>
+          <h1 class="text-8xl">404</h1>
         </div>
         <div
           class="four_zero_four_bg h-[400px] w-full max-w-[600px] bg-cover bg-center"

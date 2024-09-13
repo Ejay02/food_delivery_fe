@@ -1,7 +1,7 @@
 <template>
-  <LoadingScreen />
+  <LoadingScreen v-if="loading" />
   <div
-    v-if="isModalOpen('login-modal')"
+    v-if="isModalOpen('login-modal') && !loading"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
     @click.self="closeModal('login-modal')"
   >
@@ -110,6 +110,11 @@ const { openModal, closeModal, isModalOpen } = useModalManagement();
 const email = ref("");
 const password = ref("");
 
+const resetForm = () => {
+  email.value = "";
+  password.value = "";
+};
+
 const isFormValid = computed(() => {
   return email.value.trim() !== "" && password.value.trim() !== "";
 });
@@ -126,11 +131,15 @@ const handleSubmit = async () => {
         },
       }
     );
-    userStore.setUser(res.data);
-    notify("Login successful", "success");
-    closeModal("login-modal");
+
+    if (res.data) {
+      notify("Login successful", "success");
+      resetForm();
+      userStore.setUser(res.data);
+      closeModal("login-modal");
+    }
   } catch (error) {
-    notify("Login failed", "error");
+    notify(error.message, "error");
   }
 };
 

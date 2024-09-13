@@ -2,7 +2,7 @@
   <div
     class="fixed top-0 left-0 w-full h-full bg-white/80 z-[9999] flex justify-center items-center transition-opacity duration-300"
   >
-    <h2 class="ml-4 text-xl text-primary">
+    <h2 class="ml-4 text-xl text-blue-500">
       Loading, stand by<span class="dots"
         ><span>.</span><span>.</span><span>.</span></span
       >

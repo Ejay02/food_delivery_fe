@@ -40,29 +40,28 @@ export const loginMutation = gql`
       }
       accessToken
       refreshToken
-      error {
-        message
-      }
     }
   }
 `;
 
 export const activateUserMutation = gql`
-  mutation activateUser(
-    $activationToken: String! 
-    $activationCode: String!
-    ) {
+  mutation activateUser($activationToken: String!, $activationCode: String!) {
     activateUser(
       activationDto: {
         activationToken: $activationToken
         activationCode: $activationCode
-
-    }) {
+      }
+    ) {
       user {
         id
         name
         email
-        avatar
+        avatar {
+          id
+          public_id
+          url
+          userId
+        }
         role
         address
         phone_number
