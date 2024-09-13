@@ -22,7 +22,7 @@ const props = defineProps({
   },
   duration: {
     type: Number,
-    default: 3000,
+    default: 5000,
   },
 });
 
@@ -61,6 +61,7 @@ const iconClass = computed(() => {
   color: rgba(0, 0, 0, 0.88);
   font-weight: 400;
   font-size: 14px;
+  z-index: 1050;
 }
 
 .info {

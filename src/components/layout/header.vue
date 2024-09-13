@@ -3,11 +3,11 @@
     <div class="w-[90%] m-auto flex items-center justify-between h-[80px]">
       <h1 :class="styles.logo">Quick Dash</h1>
       <div class="text-white flex">
-        {{ userStore }}
-        jop
+        <!-- {{ userStore }} -->
+
         <!-- Log the user details here -->
       </div>
-      <div class="flex">
+      <div class="flex items-center m-2">
         <Nav />
         <Profile />
       </div>

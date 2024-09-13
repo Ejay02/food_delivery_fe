@@ -108,31 +108,6 @@ const { openModal, closeModal, isModalOpen } = useModalManagement();
 const email = ref("");
 const password = ref("");
 
-// const showModal = () => {
-//   openModal("login-modal");
-// };
-
-// const closeModal = () => {
-//   closeModal("login-modal");
-//   email.value = "";
-//   password.value = "";
-// };
-
-// const closeModal = (event) => {
-//   if (event.target === event.currentTarget) {
-//     isModalVisible.value = false;
-//     email.value = "";
-//     password.value = "";
-//   }
-// };
-
-// const signupModal = ref(null);
-
-// const showSignUpModal = () => {
-//   closeModal("login-modal");
-//   openModal("signup-modal");
-// };
-
 const isFormValid = computed(() => {
   return email.value.trim() !== "" && password.value.trim() !== "";
 });

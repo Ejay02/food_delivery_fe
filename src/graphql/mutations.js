@@ -46,3 +46,28 @@ export const loginMutation = gql`
     }
   }
 `;
+
+export const activateUserMutation = gql`
+  mutation activateUser(
+    $activationToken: String! 
+    $activationCode: String!
+    ) {
+    activateUser(
+      activationDto: {
+        activationToken: $activationToken
+        activationCode: $activationCode
+
+    }) {
+      user {
+        id
+        name
+        email
+        avatar
+        role
+        address
+        phone_number
+        createdAt
+      }
+    }
+  }
+`;

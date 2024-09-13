@@ -68,7 +68,7 @@
             id="number"
             v-model="number"
             required
-            placeholder="+001 *** ****"
+            placeholder="+001 234 5678"
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
@@ -124,12 +124,10 @@
 
 <script setup>
 import { computed, ref } from "vue";
-
 import { useMutation } from "@vue/apollo-composable";
+import { useUserStore } from "../../store/userStore";
 import { registerMutation } from "../../graphql/mutations";
 import { useNotifications } from "../../composables/globalAlert";
-import { useUserStore } from "../../store/userStore";
-// import ActivationModal from "./activationModal.vue";
 import { useModalManagement } from "../../utils/modalManagement";
 
 const userStore = useUserStore();
@@ -143,7 +141,12 @@ const password = ref("");
 const number = ref("");
 
 const isFormValid = computed(() => {
-  return email.value.trim() !== "" && password.value.trim() !== "";
+  return (
+    name.value.trim() !== "" &&
+    email.value.trim() !== "" &&
+    password.value.trim() !== "" &&
+    number.value !== ""
+  );
 });
 
 const { mutate: register, loading } = useMutation(registerMutation);
@@ -164,10 +167,11 @@ const handleSubmit = async () => {
       notify("Please check your email to activate your account", "success");
 
       closeModal("signup-modal");
+      // resetForm();
       openModal("activation-modal");
     }
   } catch (error) {
-    notify("Registration failed", "error");
+    notify(error.message, "error");
   }
 };
 
