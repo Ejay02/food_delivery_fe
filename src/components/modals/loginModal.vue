@@ -100,6 +100,7 @@ import { useNotifications } from "../../composables/globalAlert";
 import { useUserStore } from "../../store/userStore";
 import { useModalManagement } from "../../utils/modalManagement";
 import LoadingScreen from "../loadingScreen.vue";
+import { setCookie, getCookie, eraseCookie } from "@/utils/cookie";
 
 const userStore = useUserStore();
 
@@ -123,18 +124,13 @@ const { mutate: login, error, loading } = useMutation(loginMutation);
 
 const handleSubmit = async () => {
   try {
-    const res = await login(
-      { email: email.value, password: password.value },
-      {
-        context: {
-          headers: userStore.setHeaders(),
-        },
-      }
-    );
+    const res = await login({ email: email.value, password: password.value });
 
     if (res.data) {
       notify("Login successful", "success");
       resetForm();
+      setCookie("access_token", res.data.login.accessToken, 7);
+      setCookie("refresh_token", res.data.login.refreshToken, 7);
       userStore.setUser(res.data);
       closeModal("login-modal");
     }
@@ -168,5 +164,17 @@ const signUp = () => {
   // Implement sign up logic or navigation
 };
 
+// getting a cookie
+const getUserToken = () => {
+  const token = getCookie("user_token");
+  console.log("User token:", token);
+};
+console.log("getUserToken:", getUserToken);
+
+//  removing a cookie
+const logoutUser = () => {
+  eraseCookie("user_token");
+  // Additional logout logic...
+};
 defineExpose({ handleSubmit });
 </script>

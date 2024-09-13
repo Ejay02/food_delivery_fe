@@ -95,6 +95,7 @@ const handleSubmit = async () => {
     });
 
     notify("Account verified successfully", "success");
+    localStorage.removeItem("activation_token");
     closeModal("activation-modal");
     resetActivationTokens();
   } catch (error) {
