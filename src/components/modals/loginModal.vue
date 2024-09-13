@@ -1,4 +1,5 @@
 <template>
+  <LoadingScreen />
   <div
     v-if="isModalOpen('login-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
@@ -98,6 +99,7 @@ import { useNotifications } from "../../composables/globalAlert";
 
 import { useUserStore } from "../../store/userStore";
 import { useModalManagement } from "../../utils/modalManagement";
+import LoadingScreen from "../loadingScreen.vue";
 
 const userStore = useUserStore();
 

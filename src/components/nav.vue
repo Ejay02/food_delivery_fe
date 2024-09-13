@@ -70,5 +70,5 @@ const closeMenu = () => {
 </script>
 
 <style scoped>
-/* Add any additional styles here */
+
 </style>
