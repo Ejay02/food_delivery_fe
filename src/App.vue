@@ -18,7 +18,7 @@ provideModalManagement();
   >
     <button
       @click="toggleDarkMode"
-      class="p-2 bg-gray-200 dark:bg-gray-700 rounded fixed top-0 right-0 m-4 ml-4"
+      class="p-2 bg-gray-200 dark:bg-gray-700 rounded fixed right-0 mt-6 mr-4"
     >
       <!-- day -->
       <svg
@@ -28,7 +28,7 @@ provideModalManagement();
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        class="size-6"
+        class="size-4"
       >
         <path
           stroke-linecap="round"
@@ -45,7 +45,7 @@ provideModalManagement();
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        class="size-6"
+        class="size-4"
       >
         <path
           stroke-linecap="round"

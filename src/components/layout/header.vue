@@ -7,7 +7,7 @@
 
         <!-- Log the user details here -->
       </div>
-      <div class="flex items-center m-2">
+      <div class="flex items-center">
         <Nav />
         <Profile />
       </div>
