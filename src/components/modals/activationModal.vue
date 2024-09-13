@@ -46,7 +46,7 @@
 
       <div class="mt-4 text-center text-sm">
         <p class="">
-          Go Back To SignIn? 
+          Go Back To Signup?
           <a
             href="#"
             @click="switchToSignup"
@@ -88,20 +88,17 @@ const { mutate: activate, error, loading } = useMutation(activateUserMutation);
 const handleSubmit = async () => {
   try {
     const activationCode = activationTokens.value.join("");
-    console.log("activationCode:", activationCode);
 
     const res = await activate({
       activationToken: token,
       activationCode: activationCode,
     });
-    console.log("res:", res);
 
     notify("Account verified successfully", "success");
     closeModal("activation-modal");
     resetActivationTokens();
   } catch (error) {
-    console.log("error:", error);
-    notify("Couldn't verify token", "error");
+    notify(error.message, "error");
   }
 };
 
