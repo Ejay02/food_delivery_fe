@@ -14,12 +14,12 @@ const refreshToken = getCookie("refresh_token");
 
 // Middleware for attaching tokens to headers
 const authMiddleware = new ApolloLink((operation, forward) => {
-  operation.setContext({
-    headers: {
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
-      "x-refresh-token": refreshToken || "",
-    },
-  });
+  const headers = {
+    Authorization: accessToken ? `Bearer ${accessToken}` : "",
+    "refresh-token": refreshToken || "",
+  };
+
+  operation.setContext({ headers });
 
   return forward(operation);
 });
@@ -27,6 +27,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 // HTTP link to the GraphQL server
 const httpLink = createHttpLink({
   uri: `${import.meta.env.VITE_APP_SERVER_URI}/graphql`,
+  credentials: "include",
 });
 
 // Error handling for Apollo Client

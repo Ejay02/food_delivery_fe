@@ -70,3 +70,12 @@ export const activateUserMutation = gql`
     }
   }
 `;
+
+
+export const logoutMutation = gql`
+  mutation logout {
+    logout {
+      message
+    }
+  }
+`;

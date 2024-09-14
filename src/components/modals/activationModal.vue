@@ -10,8 +10,10 @@
       @click.stop
     >
       <h2 class="text-2xl font-bold mb-6 text-center">Verify Your Account</h2>
+      <h6 class="text-center">We've sent a 4-digit code by email.</h6>
+      <h6 class="text-center">Don't see it? Check your spam folder.</h6>
 
-      <div class="m-auto flex items-center justify-around mt-16">
+      <div class="m-auto flex items-center justify-around mt-12">
         <input
           v-for="(box, index) in 4"
           :key="index"
@@ -19,6 +21,7 @@
           v-model="activationTokens[index]"
           required
           maxlength="1"
+          autofocus
           :class="{
             'w-[65px] h-[65px] bg-transparent border-[3px] rounded-[10px] flex items-center text-white justify-center text-[18px] outline-none text-center': true,
             'shake border-red-500': error,
@@ -61,15 +64,17 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useModalManagement } from "../../utils/modalManagement";
-import { useNotifications } from "../../composables/globalAlert";
-import { activateUserMutation } from "@/graphql/mutations";
-import { useMutation } from "@vue/apollo-composable";
 import LoadingScreen from "../loadingScreen.vue";
+import { useUserStore } from "@/store/userStore";
+import { useMutation } from "@vue/apollo-composable";
+import { activateUserMutation } from "@/graphql/mutations";
+import { useNotifications } from "../../composables/globalAlert";
+import { useModalManagement } from "../../utils/modalManagement";
 
 const { notify } = useNotifications();
 
 const { openModal, closeModal, isModalOpen } = useModalManagement();
+const userStore = useUserStore();
 
 const activationTokens = ref(["", "", "", ""]);
 
@@ -94,10 +99,30 @@ const handleSubmit = async () => {
       activationCode: activationCode,
     });
 
-    notify("Account verified successfully", "success");
-    localStorage.removeItem("activation_token");
-    closeModal("activation-modal");
-    resetActivationTokens();
+    // notify("Account verified successfully", "success");
+    // localStorage.removeItem("activation_token");
+    // closeModal("activation-modal");
+    // resetActivationTokens();
+    if (res.data && res.data.activateUser) {
+      const { accessToken, refreshToken, user } = res.data.activateUser;
+
+      // Set user data in the store
+      userStore.setUser({
+        accessToken,
+        refreshToken,
+        user,
+      });
+      // Set cookies
+      setCookie("access_token", accessToken, 7);
+      setCookie("refresh_token", refreshToken, 7);
+
+      notify("Account verified successfully", "success");
+      localStorage.removeItem("activation_token");
+      closeModal("activation-modal");
+      resetActivationTokens();
+    } else {
+      throw new Error("Activation failed. Please try again.");
+    }
   } catch (error) {
     notify(error.message, "error");
   }

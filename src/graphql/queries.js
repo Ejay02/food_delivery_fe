@@ -1,18 +1,25 @@
 import gql from "graphql-tag";
 
 export const authUserQuery = gql`
-  query authUser {
-    user {
-      id
-      name
-      email
-      avatar
-      role
-      address
-      phone_number
-      createdAt
+  query {
+    authUser {
+      user {
+        id
+        name
+        email
+        avatar {
+          id
+          public_id
+          url
+          userId
+        }
+        role
+        address
+        phone_number
+        createdAt
+      }
+      accessToken
+      refreshToken
     }
-    accessToken
-    refreshToken
   }
 `;

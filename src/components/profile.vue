@@ -1,20 +1,26 @@
 <template>
   <div class="flex items-center">
-    <a-dropdown v-if="avatar">
+    <!-- auth -->
+
+    <a-dropdown v-if="isAuthenticated">
       <a class="ant-dropdown-link cursor-pointer" @click.prevent>
         <!-- Hover me -->
-        <div>
-          <div>
+        <div class="mr-8">
+          <div v-if="userStore?.avatar">
+            <!-- :src="userStore?.avatar" -->
             <img
-              :src="avatar"
+              src="https://via.placeholder.com/150"
               alt="user image"
-              style="width: 50px; height: 50px; border-radius: 5px"
+              class="w-12 h-12 rounded-md object-cover"
             />
+            <!--   style="width: 50px; height: 50px; border-radius: 5px" -->
           </div>
-          <!-- <div v-else>
-            <i class="fa-solid fa-circle-user mr-5"></i>
-          
-          </div> -->
+          <div
+            v-else
+            class="w-8 h-8 text-center text-xs rounded-md bg-gray-300 flex items-center justify-center font-bold text-gray-900"
+          >
+            {{ fullName[0] }}
+          </div>
         </div>
       </a>
       <template #overlay>
@@ -25,8 +31,8 @@
             >
               <i class="fa-solid fa-ellipsis-vertical"></i>
               <div class="">
-                <p class="mb-0">Signed in as</p>
-                <span class="text-xs">hello@test.com</span>
+                <p class="mb-0 text-xs">Signed in as</p>
+                <span class="text-xs">{{ fullName }}</span>
               </div>
             </div>
           </a-menu-item>
@@ -68,11 +74,9 @@
       </template>
     </a-dropdown>
 
-    <!-- auth -->
     <div v-else class="cursor-pointer" @click="openModal('login-modal')">
       <i class="fa-solid fa-circle-user mr-9"></i>
     </div>
-
     <LoginModal />
     <SignupModal />
     <ActivationModal />
@@ -80,13 +84,27 @@
 </template>
 
 <script setup>
+import { computed, onMounted } from "vue";
 import LoginModal from "./modals/loginModal.vue";
 import SignupModal from "./modals/signupModal.vue";
 import ActivationModal from "./modals/activationModal.vue";
-
 import { useModalManagement } from "../utils/modalManagement";
+import { useUserStore } from "@/store/userStore";
 
 const { openModal } = useModalManagement();
+
+const userStore = useUserStore();
+console.log("userStore:", userStore);
+
+const isAuthenticated = computed(() => userStore?.isAuthenticated);
+
+const userRole = computed(() => userStore.role);
+const fullName = computed(() => userStore.name);
+const isAdmin = computed(() => userStore.role === "admin");
+
+onMounted(() => {
+  userStore.fetchUser();
+});
 </script>
 
 <style scoped></style>

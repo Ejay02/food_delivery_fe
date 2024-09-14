@@ -1,7 +1,8 @@
 <template>
   <LoadingScreen v-if="loading" />
+
   <div
-    v-if="isModalOpen('login-modal') && !loading"
+    v-if="isModalOpen('login-modal') && !loading && !error"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
     @click.self="closeModal('login-modal')"
   >
@@ -93,13 +94,12 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import LoadingScreen from "../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
+import { useUserStore } from "../../store/userStore";
 import { loginMutation } from "../../graphql/mutations";
 import { useNotifications } from "../../composables/globalAlert";
-
-import { useUserStore } from "../../store/userStore";
 import { useModalManagement } from "../../utils/modalManagement";
-import LoadingScreen from "../loadingScreen.vue";
 import { setCookie, getCookie, eraseCookie } from "@/utils/cookie";
 
 const userStore = useUserStore();
@@ -126,12 +126,22 @@ const handleSubmit = async () => {
   try {
     const res = await login({ email: email.value, password: password.value });
 
-    if (res.data) {
+    if (res.data && res.data.login) {
+      const { accessToken, refreshToken, user } = res.data.login;
+
+      // Set user data in the store
+      userStore.setUser({
+        accessToken,
+        refreshToken,
+        user,
+      });
+
+      // Set cookies
+      setCookie("access_token", accessToken, 7);
+      setCookie("refresh_token", refreshToken, 7);
+
       notify("Login successful", "success");
       resetForm();
-      setCookie("access_token", res.data.login.accessToken, 7);
-      setCookie("refresh_token", res.data.login.refreshToken, 7);
-      userStore.setUser(res.data);
       closeModal("login-modal");
     }
   } catch (error) {
@@ -159,22 +169,17 @@ const forgotPassword = () => {
   // Implement forgot password logic
 };
 
-const signUp = () => {
-  console.log("Sign up");
-  // Implement sign up logic or navigation
-};
+// // getting a cookie
+// const getUserToken = () => {
+//   const token = getCookie("user_token");
 
-// getting a cookie
-const getUserToken = () => {
-  const token = getCookie("user_token");
-  console.log("User token:", token);
-};
-console.log("getUserToken:", getUserToken);
+// };
+// console.log("getUserToken:", getUserToken());
 
 //  removing a cookie
-const logoutUser = () => {
-  eraseCookie("user_token");
-  // Additional logout logic...
-};
+// const logoutUser = () => {
+//   eraseCookie("user_token");
+//   // Additional logout logic...
+// };
 defineExpose({ handleSubmit });
 </script>
