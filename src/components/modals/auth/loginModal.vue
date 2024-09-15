@@ -93,15 +93,15 @@
 </template>
 
 <script setup>
+import { setCookie } from "@/utils/cookie";
 import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
 import { loginMutation } from "../../../graphql/mutations";
 import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
-import { setCookie } from "@/utils/cookie";
-import { useRoute, useRouter } from "vue-router";
 
 const userStore = useUserStore();
 
@@ -130,8 +130,6 @@ const { mutate: login, error, loading } = useMutation(loginMutation);
 
 const handleSubmit = async () => {
   try {
-    // const res = await login({ email: email.value, password: password.value });
-
     const variables = {
       email: email.value,
       password: password.value,

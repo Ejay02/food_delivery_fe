@@ -105,11 +105,6 @@ const isLoggingOut = ref(false);
 
 const { mutate: logoutMutate } = useMutation(logoutMutation);
 
-// onLogoutError((error) => {
-//   notify("Logout error, please try again", "error");
-//   isLoggingOut.value = false;
-// });
-
 const handleLogout = async () => {
   if (isLoggingOut.value) return;
 

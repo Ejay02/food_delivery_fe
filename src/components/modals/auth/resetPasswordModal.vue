@@ -62,12 +62,9 @@
 import { computed, onMounted, ref } from "vue";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
-import { useUserStore } from "../../../store/userStore";
 import { resetPasswordMutation } from "../../../graphql/mutations";
 import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
-
-const userStore = useUserStore();
 
 const { notify } = useNotifications();
 
