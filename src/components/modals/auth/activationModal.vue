@@ -64,12 +64,12 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import LoadingScreen from "../loadingScreen.vue";
+import LoadingScreen from "../../loadingScreen.vue";
 import { useUserStore } from "@/store/userStore";
 import { useMutation } from "@vue/apollo-composable";
 import { activateUserMutation } from "@/graphql/mutations";
-import { useNotifications } from "../../composables/globalAlert";
-import { useModalManagement } from "../../utils/modalManagement";
+import { useNotifications } from "../../../composables/globalAlert";
+import { useModalManagement } from "../../../utils/modalManagement";
 
 const { notify } = useNotifications();
 
@@ -99,10 +99,6 @@ const handleSubmit = async () => {
       activationCode: activationCode,
     });
 
-    // notify("Account verified successfully", "success");
-    // localStorage.removeItem("activation_token");
-    // closeModal("activation-modal");
-    // resetActivationTokens();
     if (res.data && res.data.activateUser) {
       const { accessToken, refreshToken, user } = res.data.activateUser;
 

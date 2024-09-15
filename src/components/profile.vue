@@ -82,6 +82,7 @@
     <LoginModal />
     <SignupModal />
     <ActivationModal />
+    <ForgotPasswordModal />
   </div>
 </template>
 
@@ -89,13 +90,14 @@
 import { eraseCookie } from "@/utils/cookie";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "@/store/userStore";
-import LoginModal from "./modals/loginModal.vue";
-import SignupModal from "./modals/signupModal.vue";
+import LoginModal from "./modals/auth/loginModal.vue";
+import SignupModal from "./modals/auth/signupModal.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { logoutMutation } from "@/graphql/mutations";
-import ActivationModal from "./modals/activationModal.vue";
+import ActivationModal from "./modals/auth/activationModal.vue";
 import { useNotifications } from "@/composables/globalAlert";
 import { useModalManagement } from "../utils/modalManagement";
+import ForgotPasswordModal from "./modals/auth/forgotPasswordModal.vue";
 
 const { notify } = useNotifications();
 
@@ -105,9 +107,7 @@ const userStore = useUserStore();
 
 const isAuthenticated = computed(() => userStore?.isAuthenticated);
 
-const userRole = computed(() => userStore.role);
 const fullName = computed(() => userStore.name);
-const isAdmin = computed(() => userStore.role === "admin");
 
 const isLoggingOut = ref(false);
 

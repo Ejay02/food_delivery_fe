@@ -71,10 +71,17 @@ export const activateUserMutation = gql`
   }
 `;
 
-
 export const logoutMutation = gql`
   mutation logout {
     logout {
+      message
+    }
+  }
+`;
+
+export const forgotPasswordMutation = gql`
+  mutation forgotPassword($email: String!) {
+    forgotPassword(forgotPasswordInput: { email: $email }) {
       message
     }
   }

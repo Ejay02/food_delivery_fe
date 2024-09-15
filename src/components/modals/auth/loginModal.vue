@@ -1,34 +1,14 @@
 <template>
   <LoadingScreen v-if="loading" />
-  <div
-    v-if="isModalOpen('signup-modal')"
-    class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
-    @click.self="closeModal('signup-modal')"
-  >
-    <div
-      class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md"
-      @click.stop
-    >
-      <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-      <form @submit.prevent="" class="space-y-4">
-        <!-- name -->
-        <div>
-          <label for="email" class="block mb-2 text-sm font-medium"
-            >Name:</label
-          >
-          <input
-            type="text"
-            id="name"
-            v-model="name"
-            required
-            autofocus
-            min="4"
-            placeholder="Jane Smith"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-          />
-        </div>
 
-        <!-- email -->
+  <div
+    v-if="isModalOpen('login-modal') && !loading && !error"
+    class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+    @click.self="closeModal('login-modal')"
+  >
+    <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
+      <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+      <form @submit.prevent="" class="space-y-4">
         <div>
           <label for="email" class="block mb-2 text-sm font-medium"
             >Email:</label
@@ -43,7 +23,6 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
-        <!-- password -->
         <div>
           <label for="password" class="block mb-2 text-sm font-medium"
             >Password:</label
@@ -54,31 +33,21 @@
             v-model="password"
             required
             placeholder="myPassword@#12$"
-            minlength="8"
+            minlength="6"
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
 
-        <!-- number -->
-        <div>
-          <label for="password" class="block mb-2 text-sm font-medium"
-            >Phone Number:</label
+        <div class="mt-6 text-sm text-end">
+          <a href="#" @click="forgotPassword" class="hover:underline"
+            >Forgot password?</a
           >
-          <input
-            type="number"
-            id="number"
-            v-model="number"
-            required
-            placeholder="+001 234 5678"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-          />
         </div>
 
-        <!-- submit -->
         <button
           @click="handleSubmit"
           type="submit"
-          :disabled="!isFormValid || loading"
+          :disabled="!isFormValid"
           :class="[
             'w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
             isFormValid
@@ -86,12 +55,12 @@
               : 'bg-blue-300 text-gray-500 cursor-not-allowed',
           ]"
         >
-          Sign Up
+          Login
         </button>
       </form>
 
       <div class="mt-4 text-center">
-        <p class="text-sm">Or signup with</p>
+        <p class="text-sm">Or login with</p>
         <div class="flex justify-center space-x-4 mt-2">
           <button
             @click="loginWithGithub"
@@ -110,12 +79,12 @@
 
       <div class="mt-4 text-center text-sm">
         <p class="">
-          Have an account?
+          Need an account?
           <a
             href="#"
-            @click="switchToLogin"
+            @click="switchToSignup"
             class="text-blue-500 hover:underline"
-            >Login</a
+            >Sign up</a
           >
         </p>
       </div>
@@ -125,68 +94,64 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
-import { useUserStore } from "../../store/userStore";
-import { registerMutation } from "../../graphql/mutations";
-import { useNotifications } from "../../composables/globalAlert";
-import { useModalManagement } from "../../utils/modalManagement";
-import LoadingScreen from "../loadingScreen.vue";
+import { useUserStore } from "../../../store/userStore";
+import { loginMutation } from "../../../graphql/mutations";
+import { useNotifications } from "../../../composables/globalAlert";
+import { useModalManagement } from "../../../utils/modalManagement";
+import { setCookie, getCookie, eraseCookie } from "@/utils/cookie";
 
 const userStore = useUserStore();
 
 const { notify } = useNotifications();
+
 const { openModal, closeModal, isModalOpen } = useModalManagement();
 
-const name = ref("");
 const email = ref("");
 const password = ref("");
-const number = ref("");
 
 const resetForm = () => {
-  name.value = "";
   email.value = "";
   password.value = "";
-  number.value = "";
 };
 
 const isFormValid = computed(() => {
-  return (
-    name.value.trim() !== "" &&
-    email.value.trim() !== "" &&
-    password.value.trim() !== "" &&
-    number.value !== ""
-  );
+  return email.value.trim() !== "" && password.value.trim() !== "";
 });
 
-const { mutate: register, loading } = useMutation(registerMutation);
+const { mutate: login, error, loading } = useMutation(loginMutation);
 
 const handleSubmit = async () => {
   try {
-    const res = await register({
-      name: name.value,
-      email: email.value,
-      password: password.value,
-      phone_number: number.value,
-    });
+    const res = await login({ email: email.value, password: password.value });
 
-    if (res.data.register) {
-      const actToken = res.data.register.activation_token;
+    if (res.data && res.data.login) {
+      const { accessToken, refreshToken, user } = res.data.login;
 
-      localStorage.setItem("activation_token", actToken);
-      notify("Please check your email to activate your account", "success");
+      // Set user data in the store
+      userStore.setUser({
+        accessToken,
+        refreshToken,
+        user,
+      });
 
-      closeModal("signup-modal");
+      // Set cookies
+      setCookie("access_token", accessToken, 7);
+      setCookie("refresh_token", refreshToken, 7);
+
+      notify("Login successful", "success");
       resetForm();
-      openModal("activation-modal");
+      closeModal("login-modal");
     }
   } catch (error) {
     notify(error.message, "error");
   }
 };
 
-const switchToLogin = () => {
-  closeModal("signup-modal");
-  openModal("login-modal");
+const switchToSignup = () => {
+  closeModal("login-modal");
+  openModal("signup-modal");
 };
 
 const loginWithGithub = () => {
@@ -201,7 +166,8 @@ const loginWithGmail = () => {
 
 const forgotPassword = () => {
   console.log("Forgot password");
-  // Implement forgot password logic
+  closeModal("login-modal");
+  openModal("forgot-modal");
 };
 
 defineExpose({ handleSubmit });

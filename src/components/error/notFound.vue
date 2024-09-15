@@ -1,31 +1,16 @@
 <template>
-  <div class="h-screen flex justify-center items-center">
-    <section class="container text-center">
-      <div class="content flex flex-col justify-center items-center">
-        <div class="four_zero_four_text">
-          <h1 class="text-8xl">404</h1>
-        </div>
-        <div
-          class="four_zero_four_bg h-[400px] w-full max-w-[600px] bg-cover bg-center"
-          style="
-            background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
-          "
-        ></div>
-        <div class="content_box_404">
-          <h3 class="text-xl">Hmmm, looks like you're lost</h3>
-          <p>The page you are looking for is not available!</p>
-          <button
-            class="bg-[#ffd333] text-black py-2 px-4 rounded-md"
-            type="submit"
-          >
-            <a href="/" class="text-black no-underline hover:underline"
-              >Go Home</a
-            >
-          </button>
-        </div>
-      </div>
-    </section>
+  <div class="min-h-screen flex flex-col items-center justify-center">
+    <div class="flex items-center">
+      <p class="text-2xl font-semibold mr-2">404</p>
+      <p class="text-2xl font-semibold mr-2">|</p>
+      <p class="ml-2 text-center">The page you're looking for doesn't exist.</p>
+    </div>
+
+    <router-link
+      to="/"
+      class="mt-6 px-4 py-2 bg-black bg-opacity-40 text-white rounded-lg shadow-lg backdrop-blur-md hover:bg-opacity-50 transition"
+    >
+      Go Home
+    </router-link>
   </div>
 </template>
-
-<script setup></script>

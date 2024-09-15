@@ -71,8 +71,9 @@ export const useUserStore = defineStore("user", {
       await refetch();
     },
   },
+
   getters: {
     isAuthenticated: (state) => !!state?.accessToken,
-    // Add more getters as needed
+    // isNotAdmin: (state) => !!state?.role,
   },
 });
