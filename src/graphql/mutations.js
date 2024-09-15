@@ -86,3 +86,16 @@ export const forgotPasswordMutation = gql`
     }
   }
 `;
+
+export const resetPasswordMutation = gql`
+  mutation resetPassword($password: String!, $activationToken: String!) {
+    resetPassword(
+      resetPasswordInput: {
+        password: $password
+        activationToken: $activationToken
+      }
+    ) {
+      message
+    }
+  }
+`;

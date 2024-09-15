@@ -83,6 +83,7 @@
     <SignupModal />
     <ActivationModal />
     <ForgotPasswordModal />
+    <ResetPasswordModal />
   </div>
 </template>
 

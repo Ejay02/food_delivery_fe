@@ -2,27 +2,24 @@
   <LoadingScreen v-if="loading" />
 
   <div
-    v-if="isModalOpen('forgot-modal') && !loading && !error"
+    v-if="isModalOpen('reset-modal') && !loading && !error"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
-    @click.self="closeModal('forgot-modal')"
+    @click.self="closeModal('reset-modal')"
   >
     <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
-      <h2 class="text-2xl font-bold mb-2 text-center">Forgot password?</h2>
-      <h6 class="text-sm mb-6">
-        No worries, we will send reset instructions to your email.
-      </h6>
+      <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
       <form @submit.prevent="" class="space-y-4">
         <div>
-          <label for="email" class="block mb-2 text-sm font-medium"
-            >Email:</label
+          <label for="password" class="block mb-2 text-sm font-medium"
+            >Password:</label
           >
           <input
-            type="email"
-            id="email"
-            v-model="email"
+            type="password"
+            id="password"
+            v-model="password"
             required
-            autofocus
-            placeholder="hello@test.com"
+            placeholder="myPassword@#12$"
+            minlength="8"
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
@@ -38,18 +35,18 @@
               : 'bg-blue-300 text-gray-500 cursor-not-allowed',
           ]"
         >
-          Send Mail
+          Reset
         </button>
       </form>
 
       <div class="mt-4 text-center text-sm">
         <p class="">
-          Go back to
+          Need an account?
           <a
             href="#"
-            @click="switchToLogin"
+            @click="switchToSignup"
             class="text-blue-500 hover:underline"
-            >Login</a
+            >Sign up</a
           >
         </p>
       </div>
@@ -59,39 +56,49 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { forgotPasswordMutation } from "@/graphql/mutations";
+import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
-import LoadingScreen from "@/components/loadingScreen.vue";
-import { useModalManagement } from "@/utils/modalManagement";
-import { useNotifications } from "@/composables/globalAlert";
+import { useUserStore } from "../../../store/userStore";
+import { resetPasswordMutation } from "../../../graphql/mutations";
+import { useNotifications } from "../../../composables/globalAlert";
+import { useModalManagement } from "../../../utils/modalManagement";
 
-const email = ref("");
+const userStore = useUserStore();
+
 const { notify } = useNotifications();
+
 const { openModal, closeModal, isModalOpen } = useModalManagement();
 
-const switchToLogin = () => {
-  closeModal("forgot-modal");
-  openModal("login-modal");
+const password = ref("");
+
+const resetForm = () => {
+  password.value = "";
 };
 
 const isFormValid = computed(() => {
-  return email.value.trim() !== "";
+  return password.value.trim() !== "";
 });
 
 const {
-  mutate: forgotPassword,
+  mutate: resetPassword,
   error,
   loading,
-} = useMutation(forgotPasswordMutation);
+} = useMutation(resetPasswordMutation);
 
 const handleSubmit = async () => {
   try {
-    const res = await forgotPassword({ email: email.value });
+    const res = await resetPassword({
+      password: password.value,
+      activationToken,
+    });
     console.log("res:", res.data);
 
     if (res.data) {
-      notify("Password reset email sent to your email", "success");
-      email.value = "";
+      notify("Password Reset Successful", "success");
+      closeModal("reset-modal");
+
+      password.value = "";
+      openModal("login-modal");
     }
   } catch (error) {
     notify(error.message, "error");
