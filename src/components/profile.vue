@@ -85,22 +85,46 @@
 
 <script setup>
 import { computed, onMounted } from "vue";
+import { eraseCookie } from "@/utils/cookie";
+import { useUserStore } from "@/store/userStore";
 import LoginModal from "./modals/loginModal.vue";
 import SignupModal from "./modals/signupModal.vue";
+import { logoutMutation } from "@/graphql/mutations";
+import { useMutation } from "@vue/apollo-composable";
 import ActivationModal from "./modals/activationModal.vue";
+import { useNotifications } from "@/composables/globalAlert";
 import { useModalManagement } from "../utils/modalManagement";
-import { useUserStore } from "@/store/userStore";
 
-const { openModal } = useModalManagement();
+const { notify } = useNotifications();
+
+const { openModal, closeModal, isModalOpen } = useModalManagement();
 
 const userStore = useUserStore();
-console.log("userStore:", userStore);
 
 const isAuthenticated = computed(() => userStore?.isAuthenticated);
 
 const userRole = computed(() => userStore.role);
 const fullName = computed(() => userStore.name);
 const isAdmin = computed(() => userStore.role === "admin");
+
+const { mutate: logoutMutate, error } = useMutation(logoutMutation);
+
+const handleLogout = async () => {
+  try {
+    const res = await logoutMutate();
+
+    if (res?.data) {
+      // Clear the authentication tokens
+      eraseCookie("access_token");
+      eraseCookie("refresh_token");
+
+      notify("Logout successful", "success");
+    }
+    openModal("login-modal");
+  } catch (error) {
+    notify("Logout error, please try again", "error");
+  }
+};
 
 onMounted(() => {
   userStore.fetchUser();

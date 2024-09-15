@@ -15,7 +15,7 @@ const refreshToken = getCookie("refresh_token");
 // Middleware for attaching tokens to headers
 const authMiddleware = new ApolloLink((operation, forward) => {
   const headers = {
-    Authorization: accessToken ? `Bearer ${accessToken}` : "",
+    "access-token": accessToken ? `${accessToken}` : "",
     "refresh-token": refreshToken || "",
   };
 

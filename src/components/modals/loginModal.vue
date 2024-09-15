@@ -169,17 +169,5 @@ const forgotPassword = () => {
   // Implement forgot password logic
 };
 
-// // getting a cookie
-// const getUserToken = () => {
-//   const token = getCookie("user_token");
-
-// };
-// console.log("getUserToken:", getUserToken());
-
-//  removing a cookie
-// const logoutUser = () => {
-//   eraseCookie("user_token");
-//   // Additional logout logic...
-// };
 defineExpose({ handleSubmit });
 </script>

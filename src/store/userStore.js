@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 import { useQuery } from "@vue/apollo-composable";
 import { authUserQuery } from "@/graphql/queries";
 import { watch } from "vue";
+import { useNotifications } from "@/composables/globalAlert";
+
+const { notify } = useNotifications();
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -24,7 +27,7 @@ export const useUserStore = defineStore("user", {
       this.loading = true;
       this.error = null;
 
-      const { result, loading, error } = useQuery(authUserQuery);
+      const { result, loading, error, refetch } = useQuery(authUserQuery);
 
       watch(result, (data) => {
         if (data && data?.authUser) {
@@ -44,7 +47,6 @@ export const useUserStore = defineStore("user", {
     },
 
     setUser(userData) {
-      console.log("userData:", userData);
       if (userData && userData?.user) {
         this.id = userData?.user?.id;
         this.name = userData?.user?.name;
