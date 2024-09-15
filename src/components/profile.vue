@@ -24,7 +24,7 @@
         </div>
       </a>
       <template #overlay>
-        <a-menu class="w-44">
+        <a-menu class="w-56">
           <a-menu-item>
             <div
               class="flex gap-3 items-center text-decoration-none text-slate-500"
@@ -32,7 +32,9 @@
               <i class="fa-solid fa-ellipsis-vertical"></i>
               <div class="">
                 <p class="mb-0 text-xs">Signed in as</p>
-                <span class="text-xs">{{ fullName }}</span>
+                <span class="text-xs truncate block max-w-full">{{
+                  userStore.email
+                }}</span>
               </div>
             </div>
           </a-menu-item>
@@ -84,13 +86,13 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
 import { eraseCookie } from "@/utils/cookie";
+import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "@/store/userStore";
 import LoginModal from "./modals/loginModal.vue";
 import SignupModal from "./modals/signupModal.vue";
-import { logoutMutation } from "@/graphql/mutations";
 import { useMutation } from "@vue/apollo-composable";
+import { logoutMutation } from "@/graphql/mutations";
 import ActivationModal from "./modals/activationModal.vue";
 import { useNotifications } from "@/composables/globalAlert";
 import { useModalManagement } from "../utils/modalManagement";
@@ -107,22 +109,39 @@ const userRole = computed(() => userStore.role);
 const fullName = computed(() => userStore.name);
 const isAdmin = computed(() => userStore.role === "admin");
 
-const { mutate: logoutMutate, error } = useMutation(logoutMutation);
+const isLoggingOut = ref(false);
+
+const { mutate: logoutMutate, onError: onLogoutError } =
+  useMutation(logoutMutation);
+
+onLogoutError((error) => {
+  notify("Logout error, please try again", "error");
+  isLoggingOut.value = false;
+});
 
 const handleLogout = async () => {
+  if (isLoggingOut.value) return;
+
+  isLoggingOut.value = true;
   try {
-    const res = await logoutMutate();
+    await logoutMutate();
 
-    if (res?.data) {
-      // Clear the authentication tokens
-      eraseCookie("access_token");
-      eraseCookie("refresh_token");
+    eraseCookie("access_token");
+    eraseCookie("refresh_token");
 
-      notify("Logout successful", "success");
-    }
-    openModal("login-modal");
+    // Clear the user store
+    userStore.clearUser();
+
+    notify("Logout successful", "success");
+
+    // Delay opening the login modal to ensure state updates have propagated
+    setTimeout(() => {
+      openModal("login-modal");
+      isLoggingOut.value = false;
+    }, 100);
   } catch (error) {
     notify("Logout error, please try again", "error");
+    isLoggingOut.value = false;
   }
 };
 

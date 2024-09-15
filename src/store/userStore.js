@@ -64,6 +64,12 @@ export const useUserStore = defineStore("user", {
     clearUser() {
       this.$reset();
     },
+
+    async refreshUser() {
+      this.clearUser();
+      const { refetch } = await this.fetchUser();
+      await refetch();
+    },
   },
   getters: {
     isAuthenticated: (state) => !!state?.accessToken,
