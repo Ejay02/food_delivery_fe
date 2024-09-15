@@ -79,11 +79,6 @@
     <div v-else class="cursor-pointer" @click="openModal('login-modal')">
       <i class="fa-solid fa-circle-user mr-9"></i>
     </div>
-    <LoginModal />
-    <SignupModal />
-    <ActivationModal />
-    <ForgotPasswordModal />
-    <ResetPasswordModal />
   </div>
 </template>
 
@@ -91,14 +86,10 @@
 import { eraseCookie } from "@/utils/cookie";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "@/store/userStore";
-import LoginModal from "./modals/auth/loginModal.vue";
-import SignupModal from "./modals/auth/signupModal.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { logoutMutation } from "@/graphql/mutations";
-import ActivationModal from "./modals/auth/activationModal.vue";
 import { useNotifications } from "@/composables/globalAlert";
 import { useModalManagement } from "../utils/modalManagement";
-import ForgotPasswordModal from "./modals/auth/forgotPasswordModal.vue";
 
 const { notify } = useNotifications();
 
@@ -112,13 +103,12 @@ const fullName = computed(() => userStore.name);
 
 const isLoggingOut = ref(false);
 
-const { mutate: logoutMutate, onError: onLogoutError } =
-  useMutation(logoutMutation);
+const { mutate: logoutMutate } = useMutation(logoutMutation);
 
-onLogoutError((error) => {
-  notify("Logout error, please try again", "error");
-  isLoggingOut.value = false;
-});
+// onLogoutError((error) => {
+//   notify("Logout error, please try again", "error");
+//   isLoggingOut.value = false;
+// });
 
 const handleLogout = async () => {
   if (isLoggingOut.value) return;

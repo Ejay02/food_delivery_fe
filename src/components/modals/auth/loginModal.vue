@@ -100,7 +100,7 @@ import { useUserStore } from "../../../store/userStore";
 import { loginMutation } from "../../../graphql/mutations";
 import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
-import { setCookie, getCookie, eraseCookie } from "@/utils/cookie";
+import { setCookie } from "@/utils/cookie";
 
 const userStore = useUserStore();
 
@@ -165,7 +165,6 @@ const loginWithGmail = () => {
 };
 
 const forgotPassword = () => {
-  console.log("Forgot password");
   closeModal("login-modal");
   openModal("forgot-modal");
 };

@@ -95,7 +95,21 @@ export const resetPasswordMutation = gql`
         activationToken: $activationToken
       }
     ) {
-      message
+      user {
+        id
+        name
+        email
+        avatar {
+          id
+          public_id
+          url
+          userId
+        }
+        role
+        address
+        phone_number
+        createdAt
+      }
     }
   }
 `;

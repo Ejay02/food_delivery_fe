@@ -7,11 +7,15 @@
     @click.self="closeModal('reset-modal')"
   >
     <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
-      <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+      <h2 class="text-2xl font-bold mb-6 text-center text-white">
+        Reset Password
+      </h2>
       <form @submit.prevent="" class="space-y-4">
         <div>
-          <label for="password" class="block mb-2 text-sm font-medium"
-            >Password:</label
+          <label
+            for="password"
+            class="block mb-2 text-sm font-medium text-white"
+            >New Password:</label
           >
           <input
             type="password"
@@ -40,13 +44,13 @@
       </form>
 
       <div class="mt-4 text-center text-sm">
-        <p class="">
-          Need an account?
+        <p class="text-white">
+          Go back to
           <a
             href="#"
-            @click="switchToSignup"
+            @click="switchToLogin"
             class="text-blue-500 hover:underline"
-            >Sign up</a
+            >Login</a
           >
         </p>
       </div>
@@ -55,7 +59,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
@@ -70,6 +74,15 @@ const { notify } = useNotifications();
 const { openModal, closeModal, isModalOpen } = useModalManagement();
 
 const password = ref("");
+const activationToken = ref("");
+
+onMounted(() => {
+  activationToken.value = localStorage.getItem("resetPasswordToken");
+  if (!activationToken.value) {
+    notify("Invalid or missing reset token", "error");
+    closeModal("reset-modal");
+  }
+});
 
 const resetForm = () => {
   password.value = "";
@@ -89,7 +102,7 @@ const handleSubmit = async () => {
   try {
     const res = await resetPassword({
       password: password.value,
-      activationToken,
+      activationToken: activationToken.value,
     });
     console.log("res:", res.data);
 
@@ -97,11 +110,17 @@ const handleSubmit = async () => {
       notify("Password Reset Successful", "success");
       closeModal("reset-modal");
 
-      password.value = "";
+      resetForm();
+      localStorage.removeItem("resetPasswordToken");
       openModal("login-modal");
     }
   } catch (error) {
     notify(error.message, "error");
   }
+};
+
+const switchToLogin = () => {
+  closeModal("signup-modal");
+  openModal("login-modal");
 };
 </script>

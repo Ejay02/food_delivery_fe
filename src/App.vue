@@ -1,5 +1,10 @@
 <script setup>
 import { useDarkMode } from "./composables/useDarkMode";
+import LoginModal from "./components/modals/auth/loginModal.vue";
+import SignupModal from "./components/modals/auth/signupModal.vue";
+import ActivationModal from "./components/modals/auth/activationModal.vue";
+import ResetPasswordModal from "./components/modals/auth/resetPasswordModal.vue";
+import ForgotPasswordModal from "./components/modals/auth/forgotPasswordModal.vue";
 
 const isDarkMode = useDarkMode();
 
@@ -56,6 +61,12 @@ provideModalManagement();
     </button>
 
     <router-view></router-view>
+
+    <LoginModal />
+    <SignupModal />
+    <ActivationModal />
+    <ForgotPasswordModal />
+    <ResetPasswordModal />
   </div>
 </template>
 
