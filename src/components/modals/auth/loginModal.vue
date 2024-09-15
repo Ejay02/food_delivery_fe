@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
@@ -101,6 +101,7 @@ import { loginMutation } from "../../../graphql/mutations";
 import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
 import { setCookie } from "@/utils/cookie";
+import { useRoute, useRouter } from "vue-router";
 
 const userStore = useUserStore();
 
@@ -108,12 +109,17 @@ const { notify } = useNotifications();
 
 const { openModal, closeModal, isModalOpen } = useModalManagement();
 
+const route = useRoute();
+const router = useRouter();
+
 const email = ref("");
 const password = ref("");
+const verifyToken = ref("");
 
 const resetForm = () => {
   email.value = "";
   password.value = "";
+  verifyToken.value = "";
 };
 
 const isFormValid = computed(() => {
@@ -124,7 +130,18 @@ const { mutate: login, error, loading } = useMutation(loginMutation);
 
 const handleSubmit = async () => {
   try {
-    const res = await login({ email: email.value, password: password.value });
+    // const res = await login({ email: email.value, password: password.value });
+
+    const variables = {
+      email: email.value,
+      password: password.value,
+    };
+
+    if (verifyToken.value) {
+      variables.verifyToken = verifyToken.value;
+    }
+
+    const res = await login(variables);
 
     if (res.data && res.data.login) {
       const { accessToken, refreshToken, user } = res.data.login;
@@ -143,6 +160,11 @@ const handleSubmit = async () => {
       notify("Login successful", "success");
       resetForm();
       closeModal("login-modal");
+
+      // Clean up URL if it contains reset password parameters
+      if (route.query.verify) {
+        router.replace({ path: "/" });
+      }
     }
   } catch (error) {
     notify(error.message, "error");
@@ -168,6 +190,14 @@ const forgotPassword = () => {
   closeModal("login-modal");
   openModal("forgot-modal");
 };
+
+onMounted(() => {
+  // Check for verify token in the URL
+  if (route.query.verify) {
+    verifyToken.value = route.query.verify;
+    openModal("login-modal");
+  }
+});
 
 defineExpose({ handleSubmit });
 </script>

@@ -131,6 +131,7 @@ const handleLogout = async () => {
       isLoggingOut.value = false;
     }, 100);
   } catch (error) {
+    console.log("error:", error);
     notify("Logout error, please try again", "error");
     isLoggingOut.value = false;
   }
