@@ -87,7 +87,6 @@ const {
 const handleSubmit = async () => {
   try {
     const res = await forgotPassword({ email: email.value });
-    console.log("res:", res.data);
 
     if (res.data) {
       notify("Password reset email sent to your email", "success");

@@ -3,6 +3,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { authUserQuery } from "@/graphql/queries";
 import { watch } from "vue";
 import { useNotifications } from "@/composables/globalAlert";
+import { setCookie } from "@/utils/cookie";
 
 const { notify } = useNotifications();
 
@@ -16,6 +17,7 @@ export const useUserStore = defineStore("user", {
     address: null,
     avatar: null,
     createdAt: null,
+    isGoogleUser: null,
     accessToken: null,
     refreshToken: null,
     loading: false,
@@ -55,6 +57,7 @@ export const useUserStore = defineStore("user", {
         this.phoneNumber = userData?.user?.phone_number;
         this.address = userData?.user?.address;
         this.avatar = userData?.user?.avatar;
+        this.isGoogleUser = userData?.user?.isGoogleUser;
         this.createdAt = userData?.user?.createdAt;
       }
       this.accessToken = userData?.accessToken;
@@ -69,6 +72,20 @@ export const useUserStore = defineStore("user", {
       this.clearUser();
       const { refetch } = await this.fetchUser();
       await refetch();
+    },
+
+    persistData() {
+      setCookie("userData", JSON.stringify(this.$state), 7);
+    },
+    restoreData() {
+      const storedData = document.cookie.match(/userData=([^;]*)/);
+      if (storedData) {
+        this.$state = JSON.parse(storedData[1]);
+      }
+    },
+
+    init() {
+      this.restoreData();
     },
   },
 

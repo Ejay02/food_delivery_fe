@@ -99,15 +99,23 @@ const handleSubmit = async () => {
       activationCode: activationCode,
     });
 
-    if (res.data && res.data.activateUser) {
-      const { accessToken, refreshToken, user } = res.data.activateUser;
+    // if (res.data) {
+    //   // const { accessToken, refreshToken, user } = res.data.activateUser;
 
-      // Set user data in the store
-      userStore.setUser({
-        accessToken,
-        refreshToken,
-        user,
-      });
+    //   // Set user data in the store
+    //   userStore.setUser({
+    //     accessToken,
+    //     refreshToken,
+    //     user,
+    //   });
+
+    if (res.data && res.data.activateUser && res.data.activateUser.user) {
+      const { user } = res.data.activateUser;
+
+      // Assuming you need to store more information,
+      // you should adjust this according to your needs
+      userStore.setUser(user);
+
       // Set cookies
       setCookie("access_token", accessToken, 7);
       setCookie("refresh_token", refreshToken, 7);
@@ -121,6 +129,7 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     notify(error.message, "error");
+    localStorage.removeItem("activation_token");
   }
 };
 

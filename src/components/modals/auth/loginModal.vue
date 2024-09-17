@@ -62,18 +62,16 @@
       <div class="mt-4 text-center">
         <p class="text-sm">Or login with</p>
         <div class="flex justify-center space-x-4 mt-2">
-          <button
-            @click="loginWithGithub"
-            class="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-700"
+          <!--  -->
+          <GoogleLogin
+            :callback="callback"
+            class="block w-full rounded-md shadow-sm"
           >
-            <i class="fab fa-github text-xl"></i>
-          </button>
-          <button
-            @click="loginWithGmail"
-            class="bg-red-600 text-white p-2 rounded-md hover:bg-red-500"
-          >
-            <i class="fab fa-google text-xl"></i>
-          </button>
+            <!-- popup-type="TOKEN" -->
+            <button class="text-white p-2 rounded-md hover:bg-slate-500">
+              <img src="/src/assets/google.jpg" class="w-4 h-4" />
+            </button>
+          </GoogleLogin>
         </div>
       </div>
 
@@ -99,7 +97,7 @@ import { useRoute, useRouter } from "vue-router";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
-import { loginMutation } from "../../../graphql/mutations";
+import { googleLoginMutation, loginMutation } from "../../../graphql/mutations";
 import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
 
@@ -151,6 +149,8 @@ const handleSubmit = async () => {
         user,
       });
 
+      userStore.persistData();
+
       // Set cookies
       setCookie("access_token", accessToken, 7);
       setCookie("refresh_token", refreshToken, 7);
@@ -174,16 +174,6 @@ const switchToSignup = () => {
   openModal("signup-modal");
 };
 
-const loginWithGithub = () => {
-  console.log("Login with GitHub");
-  // Implement GitHub login logic
-};
-
-const loginWithGmail = () => {
-  console.log("Login with Gmail");
-  // Implement Gmail login logic
-};
-
 const forgotPassword = () => {
   closeModal("login-modal");
   openModal("forgot-modal");
@@ -197,5 +187,37 @@ onMounted(() => {
   }
 });
 
-defineExpose({ handleSubmit });
+const {
+  mutate: googleLogin,
+  error: googleError,
+  loading: googleLoading,
+} = useMutation(googleLoginMutation);
+
+const callback = async (response) => {
+  try {
+    const res = await googleLogin({
+      code: response.code,
+    });
+
+    if (res.data) {
+      userStore.setUser({
+        accessToken: res.data.googleLogin.accessToken,
+        refreshToken: res.data.googleLogin.refreshToken,
+        user: res.data.googleLogin.user,
+      });
+
+      userStore.persistData();
+
+      // Set cookies
+      setCookie("access_token", res.data.googleLogin.accessToke, 7);
+      setCookie("refresh_token", res.data.googleLogin.refreshToken, 7);
+
+      notify("Login successful", "success");
+
+      closeModal("login-modal");
+    }
+  } catch (error) {
+    notify(error.message, "error");
+  }
+};
 </script>

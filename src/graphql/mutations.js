@@ -113,3 +113,28 @@ export const resetPasswordMutation = gql`
     }
   }
 `;
+
+export const googleLoginMutation = gql`
+  mutation googleLogin($code: String!) {
+    googleLogin(googleLoginInput: { code: $code }){
+      user {
+        id
+        name
+        email
+        avatar {
+          id
+          public_id
+          url
+          userId
+        }
+        role
+        address
+        phone_number
+        createdAt
+        isGoogleUser
+      }
+      accessToken
+    refreshToken
+    }
+  }
+`;

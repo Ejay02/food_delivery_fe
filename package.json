@@ -1,5 +1,5 @@
 {
-  "name": "food-delivery",
+  "name": "quick-dash",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,6 +13,7 @@
     "@apollo/client": "^3.11.8",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@prisma/client": "^5.19.1",
     "@vue/apollo-components": "^4.0.0",
     "@vue/apollo-composable": "^4.2.1",
     "@vue/apollo-option": "^4.2.0",
@@ -20,8 +21,10 @@
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
     "pinia": "^2.2.2",
+    "prisma": "^5.19.1",
     "vue": "^3.2.47",
-    "vue-router": "^4.4.3"
+    "vue-router": "^4.4.3",
+    "vue3-google-login": "^2.0.33"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",

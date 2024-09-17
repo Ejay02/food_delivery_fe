@@ -93,18 +93,15 @@
       <div class="mt-4 text-center">
         <p class="text-sm">Or signup with</p>
         <div class="flex justify-center space-x-4 mt-2">
-          <button
-            @click="loginWithGithub"
-            class="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-700"
+          <GoogleLogin
+            :callback="callback"
+            popup-type="TOKEN"
+            class="block w-full rounded-md shadow-sm"
           >
-            <i class="fab fa-github text-xl"></i>
-          </button>
-          <button
-            @click="loginWithGmail"
-            class="bg-red-600 text-white p-2 rounded-md hover:bg-red-500"
-          >
-            <i class="fab fa-google text-xl"></i>
-          </button>
+            <button class="text-white p-2 rounded-md hover:bg-slate-500">
+              <img src="/src/assets/google.jpg" class="w-4 h-4" />
+            </button>
+          </GoogleLogin>
         </div>
       </div>
 
@@ -125,12 +122,12 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
 import { registerMutation } from "../../../graphql/mutations";
 import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
-import LoadingScreen from "../../loadingScreen.vue";
 
 const userStore = useUserStore();
 
@@ -189,20 +186,23 @@ const switchToLogin = () => {
   openModal("login-modal");
 };
 
-const loginWithGithub = () => {
-  console.log("Login with GitHub");
-  // Implement GitHub login logic
-};
+const callback = async (response) => {
+  try {
+    console.log("Login with Gmail");
+    // This callback will be triggered when the user selects or login to
+    // his Google account from the popup
+    console.log("Handle the response", response);
 
-const loginWithGmail = () => {
-  console.log("Login with Gmail");
-  // Implement Gmail login logic
-};
+    // const accessToken = response.access_token;
 
-const forgotPassword = () => {
-  console.log("Forgot password");
-  // Implement forgot password logic
+    // const res = await validateGoogleToken({
+    // 	googleOauthValidateInput: {
+    // 		accessToken: accessToken,
+    // 		inviteCode,
+    // 	},
+    // });
+  } catch (error) {
+    console.log("error:", error);
+  }
 };
-
-defineExpose({ handleSubmit });
 </script>

@@ -16,6 +16,7 @@ export const authUserQuery = gql`
         role
         address
         phone_number
+        isGoogleUser
         createdAt
       }
       accessToken
@@ -23,5 +24,3 @@ export const authUserQuery = gql`
     }
   }
 `;
-
-

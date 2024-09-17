@@ -6,10 +6,9 @@
       <a class="ant-dropdown-link cursor-pointer" @click.prevent>
         <!-- Hover me -->
         <div class="mr-8">
-          <div v-if="userStore?.avatar">
-            <!-- :src="userStore?.avatar" -->
+          <div v-if="userStore?.avatar?.url">
             <img
-              src="https://via.placeholder.com/150"
+              :src="userStore?.avatar?.url"
               alt="user image"
               class="w-12 h-12 rounded-md object-cover"
             />
@@ -23,6 +22,7 @@
           </div>
         </div>
       </a>
+
       <template #overlay>
         <a-menu class="w-56">
           <a-menu-item>
@@ -38,6 +38,7 @@
               </div>
             </div>
           </a-menu-item>
+
           <a-menu-item key="profile">
             <div
               class="flex gap-3 items-center text-decoration-none text-slate-500"

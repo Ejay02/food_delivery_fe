@@ -76,7 +76,7 @@ const activationToken = ref("");
 onMounted(() => {
   activationToken.value = localStorage.getItem("resetPasswordToken");
   if (!activationToken.value) {
-    notify("Invalid or missing reset token", "error");
+    // notify("Invalid or missing reset token", "error");
     closeModal("reset-modal");
   }
 });
@@ -101,7 +101,6 @@ const handleSubmit = async () => {
       password: password.value,
       activationToken: activationToken.value,
     });
-    console.log("res:", res.data);
 
     if (res.data) {
       notify("Password Reset Successful", "success");
