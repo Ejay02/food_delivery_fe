@@ -133,6 +133,7 @@ const handleSubmit = async () => {
       password: password.value,
     };
 
+    // from forgot password
     if (verifyToken.value) {
       variables.verifyToken = verifyToken.value;
     }
@@ -193,6 +194,7 @@ const {
   loading: googleLoading,
 } = useMutation(googleLoginMutation);
 
+// googleLoginMutation
 const callback = async (response) => {
   try {
     const res = await googleLogin({
@@ -209,7 +211,7 @@ const callback = async (response) => {
       userStore.persistData();
 
       // Set cookies
-      setCookie("access_token", res.data.googleLogin.accessToke, 7);
+      setCookie("access_token", res.data.googleLogin.accessToken, 7);
       setCookie("refresh_token", res.data.googleLogin.refreshToken, 7);
 
       notify("Login successful", "success");

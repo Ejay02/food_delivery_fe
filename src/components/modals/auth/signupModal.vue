@@ -169,6 +169,8 @@ const handleSubmit = async () => {
     if (res.data.register) {
       const actToken = res.data.register.activation_token;
 
+      // find token and access token so we can set headers
+
       localStorage.setItem("activation_token", actToken);
       notify("Please check your email to activate your account", "success");
 

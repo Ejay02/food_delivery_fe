@@ -64,12 +64,13 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import LoadingScreen from "../../loadingScreen.vue";
 import { useUserStore } from "@/store/userStore";
+import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { activateUserMutation } from "@/graphql/mutations";
 import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
+import { setCookie } from "@/utils/cookie";
 
 const { notify } = useNotifications();
 
@@ -86,39 +87,33 @@ const isActivationFormValid = computed(() => {
   return activationTokens.value.every((token) => token.length === 1);
 });
 
-const token = localStorage.getItem("activation_token");
-
 const { mutate: activate, error, loading } = useMutation(activateUserMutation);
 
 const handleSubmit = async () => {
   try {
     const activationCode = activationTokens.value.join("");
+    const token = localStorage.getItem("activation_token");
 
     const res = await activate({
       activationToken: token,
       activationCode: activationCode,
     });
 
-    // if (res.data) {
-    //   // const { accessToken, refreshToken, user } = res.data.activateUser;
+    if (res.data) {
+      const { accessToken, refreshToken, user } = res.data.activateUser;
 
-    //   // Set user data in the store
-    //   userStore.setUser({
-    //     accessToken,
-    //     refreshToken,
-    //     user,
-    //   });
-
-    if (res.data && res.data.activateUser && res.data.activateUser.user) {
-      const { user } = res.data.activateUser;
-
-      // Assuming you need to store more information,
-      // you should adjust this according to your needs
-      userStore.setUser(user);
+      // Set user data in the store
+      userStore.setUser({
+        accessToken,
+        refreshToken,
+        user,
+      });
 
       // Set cookies
       setCookie("access_token", accessToken, 7);
       setCookie("refresh_token", refreshToken, 7);
+
+      userStore.persistData();
 
       notify("Account verified successfully", "success");
       localStorage.removeItem("activation_token");
@@ -128,8 +123,12 @@ const handleSubmit = async () => {
       throw new Error("Activation failed. Please try again.");
     }
   } catch (error) {
-    notify(error.message, "error");
     localStorage.removeItem("activation_token");
+
+    clearCookie("access_token");
+    clearCookie("refresh_token");
+
+    notify(error.message, "error");
   }
 };
 

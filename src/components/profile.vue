@@ -91,6 +91,7 @@ import { useMutation } from "@vue/apollo-composable";
 import { logoutMutation } from "@/graphql/mutations";
 import { useNotifications } from "@/composables/globalAlert";
 import { useModalManagement } from "../utils/modalManagement";
+import { googleLogout } from "vue3-google-login";
 
 const { notify } = useNotifications();
 
@@ -119,7 +120,15 @@ const handleLogout = async () => {
     // Clear the user store
     userStore.clearUser();
 
+    // Logout from Google (if using Google auth)
+    // if (userStore.isGoogleUser) {
+    //   googleLogout();
+    // }
+
     notify("Logout successful", "success");
+
+    // Force refetch of user data
+    await userStore.fetchCurrentUser();
 
     // Delay opening the login modal to ensure state updates have propagated
     setTimeout(() => {
@@ -127,14 +136,13 @@ const handleLogout = async () => {
       isLoggingOut.value = false;
     }, 100);
   } catch (error) {
-    console.log("error:", error);
     notify("Logout error, please try again", "error");
     isLoggingOut.value = false;
   }
 };
 
 onMounted(() => {
-  userStore.fetchUser();
+  userStore.fetchCurrentUser();
 });
 </script>
 

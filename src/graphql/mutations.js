@@ -67,6 +67,8 @@ export const activateUserMutation = gql`
         phone_number
         createdAt
       }
+      accessToken
+      refreshToken
     }
   }
 `;
@@ -116,7 +118,7 @@ export const resetPasswordMutation = gql`
 
 export const googleLoginMutation = gql`
   mutation googleLogin($code: String!) {
-    googleLogin(googleLoginInput: { code: $code }){
+    googleLogin(googleLoginInput: { code: $code }) {
       user {
         id
         name
@@ -134,7 +136,7 @@ export const googleLoginMutation = gql`
         isGoogleUser
       }
       accessToken
-    refreshToken
+      refreshToken
     }
   }
 `;

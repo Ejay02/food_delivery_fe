@@ -1,18 +1,28 @@
 <script setup>
+import { onMounted } from "vue";
+import { useUserStore } from "./store/userStore";
 import { useDarkMode } from "./composables/useDarkMode";
+import { provideModalManagement } from "./utils/modalManagement";
 import LoginModal from "./components/modals/auth/loginModal.vue";
 import SignupModal from "./components/modals/auth/signupModal.vue";
 import ActivationModal from "./components/modals/auth/activationModal.vue";
 import ResetPasswordModal from "./components/modals/auth/resetPasswordModal.vue";
 import ForgotPasswordModal from "./components/modals/auth/forgotPasswordModal.vue";
 
+const userStore = useUserStore();
+console.log("userStore:", userStore.isAuthenticated);
+
+onMounted(() => {
+  if (userStore.isAuthenticated) {
+    userStore.fetchCurrentUser(); // Fetch user data when the app loads
+  }
+});
+
 const isDarkMode = useDarkMode();
 
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value;
 };
-
-import { provideModalManagement } from "./utils/modalManagement";
 
 provideModalManagement();
 </script>

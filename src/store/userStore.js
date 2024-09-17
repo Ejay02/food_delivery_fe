@@ -25,11 +25,16 @@ export const useUserStore = defineStore("user", {
   }),
 
   actions: {
-    async fetchUser() {
+    async fetchCurrentUser() {
       this.loading = true;
       this.error = null;
 
-      const { result, loading, error, refetch } = useQuery(authUserQuery);
+      const { result, loading, error, refetch } = useQuery(
+        authUserQuery,
+        () => {
+          fetchPolicy: "network-only";
+        }
+      );
 
       watch(result, (data) => {
         if (data && data?.authUser) {
@@ -77,6 +82,7 @@ export const useUserStore = defineStore("user", {
     persistData() {
       setCookie("userData", JSON.stringify(this.$state), 7);
     },
+
     restoreData() {
       const storedData = document.cookie.match(/userData=([^;]*)/);
       if (storedData) {
