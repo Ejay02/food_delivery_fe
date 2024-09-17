@@ -87,7 +87,7 @@
 import { eraseCookie } from "@/utils/cookie";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "@/store/userStore";
-import { useMutation } from "@vue/apollo-composable";
+import { useApolloClient, useMutation } from "@vue/apollo-composable";
 import { logoutMutation } from "@/graphql/mutations";
 import { useNotifications } from "@/composables/globalAlert";
 import { useModalManagement } from "../utils/modalManagement";
@@ -108,14 +108,12 @@ const isLoggingOut = ref(false);
 const { mutate: logoutMutate } = useMutation(logoutMutation);
 
 const handleLogout = async () => {
+  const { resolveClient } = useApolloClient();
   if (isLoggingOut.value) return;
 
   isLoggingOut.value = true;
   try {
     await logoutMutate();
-
-    eraseCookie("access_token");
-    eraseCookie("refresh_token");
 
     // Clear the user store
     userStore.clearUser();

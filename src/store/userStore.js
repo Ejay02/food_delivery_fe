@@ -3,7 +3,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { authUserQuery } from "@/graphql/queries";
 import { watch } from "vue";
 import { useNotifications } from "@/composables/globalAlert";
-import { setCookie } from "@/utils/cookie";
+import { eraseCookie, setCookie } from "@/utils/cookie";
 
 const { notify } = useNotifications();
 
@@ -31,8 +31,9 @@ export const useUserStore = defineStore("user", {
 
       const { result, loading, error, refetch } = useQuery(
         authUserQuery,
-        () => {
-          fetchPolicy: "network-only";
+        null,
+        {
+          fetchPolicy: "network-only",
         }
       );
 
@@ -71,6 +72,9 @@ export const useUserStore = defineStore("user", {
 
     clearUser() {
       this.$reset();
+      eraseCookie("userData");
+      eraseCookie("access_token");
+      eraseCookie("refresh_token");
     },
 
     async refreshUser() {
