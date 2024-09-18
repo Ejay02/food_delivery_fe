@@ -1,14 +1,11 @@
 <template>
-  <LoadingScreen v-if="loading" />
+  <LoadingScreen v-if="loading || googleLoading" />
   <div
     v-if="isModalOpen('signup-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
     @click.self="closeModal('signup-modal')"
   >
-    <div
-      class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md"
-      @click.stop
-    >
+    <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
       <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
       <form @submit.prevent="" class="space-y-4">
         <!-- name -->
@@ -17,6 +14,7 @@
             >Name:</label
           >
           <input
+            ref="firstInput"
             type="text"
             id="name"
             v-model="name"
@@ -38,7 +36,6 @@
             id="email"
             v-model="email"
             required
-            autofocus
             placeholder="hello@test.com"
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
@@ -120,7 +117,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
@@ -141,6 +138,8 @@ const name = ref("");
 const email = ref("");
 const password = ref("");
 const number = ref("");
+
+const firstInput = ref(null);
 
 const resetForm = () => {
   name.value = "";
@@ -225,4 +224,17 @@ const callback = async (response) => {
     notify(error.message, "error");
   }
 };
+
+watch(
+  () => isModalOpen("signup-modal"),
+  (isOpen) => {
+    if (isOpen) {
+      nextTick(() => {
+        if (firstInput.value) {
+          firstInput.value.focus();
+        }
+      });
+    }
+  }
+);
 </script>

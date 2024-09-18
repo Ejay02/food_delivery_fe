@@ -17,11 +17,15 @@
         <input
           v-for="(box, index) in 4"
           :key="index"
+          :ref="
+            (el) => {
+              if (index === 0) firstInput = el;
+            }
+          "
           type="text"
           v-model="activationTokens[index]"
           required
           maxlength="1"
-          autofocus
           :class="{
             'w-[65px] h-[65px] bg-transparent border-[3px] rounded-[10px] flex items-center text-white justify-center text-[18px] outline-none text-center': true,
             'shake border-red-500': error,
@@ -63,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, nextTick, watch } from "vue";
 import { useUserStore } from "@/store/userStore";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
@@ -78,6 +82,7 @@ const { openModal, closeModal, isModalOpen } = useModalManagement();
 const userStore = useUserStore();
 
 const activationTokens = ref(["", "", "", ""]);
+const firstInput = ref(null);
 
 const resetActivationTokens = () => {
   activationTokens.value = ["", "", "", ""];
@@ -88,6 +93,19 @@ const isActivationFormValid = computed(() => {
 });
 
 const { mutate: activate, error, loading } = useMutation(activateUserMutation);
+
+watch(
+  () => isModalOpen("activation-modal"),
+  (isOpen) => {
+    if (isOpen) {
+      nextTick(() => {
+        if (firstInput.value) {
+          firstInput.value.focus();
+        }
+      });
+    }
+  }
+);
 
 const handleSubmit = async () => {
   try {
