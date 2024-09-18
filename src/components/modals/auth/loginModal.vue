@@ -40,8 +40,8 @@
 
         <div class="mt-6 text-sm text-end">
           <a href="#" @click="forgotPassword" class="hover:underline"
-            >Forgot password?</a
-          >
+            >Forgot password?
+          </a>
         </div>
 
         <button
@@ -87,18 +87,21 @@
       </div>
     </div>
   </div>
+
+  <Error v-if="error || googleError" />
 </template>
 
 <script setup>
 import { setCookie } from "@/utils/cookie";
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import Error from "@/components/error/error.vue";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
-import { googleLoginMutation, loginMutation } from "../../../graphql/mutations";
-import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
+import { useNotifications } from "../../../composables/globalAlert";
+import { googleLoginMutation, loginMutation } from "../../../graphql/mutations";
 
 const userStore = useUserStore();
 

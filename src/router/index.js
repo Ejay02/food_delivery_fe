@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/home.vue";
 import NotFound from "../components/error/notFound.vue";
-import ResetPasswordHandler from '../components/resetPasswordHandler.vue'
+import ResetPasswordHandler from "../components/resetPasswordHandler.vue";
 import About from "@/views/about.vue";
+import Contact from "@/views/contact.vue";
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     path: "/about",
     name: "About",
     component: About,
+  },
+  {
+    path: "/contact",
+    name: "Contact",
+    component: Contact,
   },
   {
     // path: "*",
