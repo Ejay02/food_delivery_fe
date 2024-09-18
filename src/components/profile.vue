@@ -10,9 +10,8 @@
             <img
               :src="avatar"
               alt="user avatar"
-              class="w-12 h-12 rounded-md object-cover"
+              class="w-10 h-10 rounded-md object-cover"
             />
-            <!--   style="width: 50px; height: 50px; border-radius: 5px" -->
           </div>
           <div
             v-else
