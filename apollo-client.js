@@ -5,7 +5,6 @@ import {
   InMemoryCache,
 } from "@apollo/client/core";
 import { getCookie } from "@/utils/cookie";
-// import { onError } from "@apollo/client/link/error";
 import { createApolloProvider } from "@vue/apollo-option";
 
 // Retrieve tokens from cookies
@@ -30,23 +29,8 @@ const httpLink = createHttpLink({
   credentials: "include",
 });
 
-// Error handling for Apollo Client
-// const errorLink = onError(({ graphQLErrors, networkError }) => {
-//   if (graphQLErrors) {
-//     graphQLErrors.forEach(({ message, locations, path }) => {
-//       console.error(
-//         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-//       );
-//     });
-//   }
-//   if (networkError) {
-//     console.error(`[Network error]: ${networkError}`);
-//   }
-// });
-
 // Apollo Client setup
 const apolloClient = new ApolloClient({
-  // link: ApolloLink.from([errorLink, authMiddleware, httpLink]),
   link: ApolloLink.from([authMiddleware, httpLink]),
   cache: new InMemoryCache(),
 });

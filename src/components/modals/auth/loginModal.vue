@@ -212,8 +212,11 @@ const callback = async (response) => {
       // Set cookies
       setCookie("access_token", res.data.googleLogin.accessToken, 7);
       setCookie("refresh_token", res.data.googleLogin.refreshToken, 7);
+      localStorage.setItem("avatar", res.data.googleLogin?.user?.avatar?.url);
 
       notify("Login successful", "success");
+
+      // userStore.refreshUser();
 
       closeModal("login-modal");
     }

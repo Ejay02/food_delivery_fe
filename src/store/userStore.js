@@ -62,7 +62,8 @@ export const useUserStore = defineStore("user", {
         this.role = userData?.user?.role;
         this.phoneNumber = userData?.user?.phone_number;
         this.address = userData?.user?.address;
-        this.avatar = userData?.user?.avatar;
+        this.avatar =
+          userData?.user?.avatar?.url || localStorage.getItem("avatar");
         this.isGoogleUser = userData?.user?.isGoogleUser;
         this.createdAt = userData?.user?.createdAt;
       }
@@ -75,6 +76,8 @@ export const useUserStore = defineStore("user", {
       eraseCookie("userData");
       eraseCookie("access_token");
       eraseCookie("refresh_token");
+      localStorage.removeItem("activation_token");
+      localStorage.removeItem("avatar")
     },
 
     async refreshUser() {

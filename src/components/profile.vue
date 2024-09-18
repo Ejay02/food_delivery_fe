@@ -6,10 +6,10 @@
       <a class="ant-dropdown-link cursor-pointer" @click.prevent>
         <!-- Hover me -->
         <div class="mr-8">
-          <div v-if="userStore?.avatar?.url">
+          <div v-if="avatar">
             <img
-              :src="userStore?.avatar?.url"
-              alt="user image"
+              :src="avatar"
+              alt="user avatar"
               class="w-12 h-12 rounded-md object-cover"
             />
             <!--   style="width: 50px; height: 50px; border-radius: 5px" -->
@@ -100,6 +100,7 @@ const userStore = useUserStore();
 const isAuthenticated = computed(() => userStore?.isAuthenticated);
 
 const fullName = computed(() => userStore.name);
+const avatar = computed(() => userStore.avatar);
 
 const isLoggingOut = ref(false);
 
@@ -127,8 +128,8 @@ const handleLogout = async () => {
       isLoggingOut.value = false;
     }, 100);
   } catch (error) {
-    notify("Logout error, please try again", "error");
     isLoggingOut.value = false;
+    notify("Logout error, please try again", "error");
   }
 };
 

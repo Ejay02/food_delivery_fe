@@ -216,9 +216,11 @@ const callback = async (response) => {
       setCookie("access_token", res.data.googleLogin.accessToken, 7);
       setCookie("refresh_token", res.data.googleLogin.refreshToken, 7);
 
-      notify("Login successful", "success");
+      notify("Signup successful", "success");
 
-      closeModal("login-modal");
+      // userStore.refreshUser();
+
+      closeModal("signup-modal");
     }
   } catch (error) {
     notify(error.message, "error");
