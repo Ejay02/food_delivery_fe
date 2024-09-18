@@ -69,8 +69,15 @@ provideModalManagement();
       </svg>
     </button>
 
-    <router-view></router-view>
+    <RouterLink to="/" class="fixed">
+      <img
+        class="w-10 h-10 object-cover rounded-sm text-center m-4"
+        src="./assets/quick_dash.png"
+        alt="Quick Dash Logo"
+      />
+    </RouterLink>
 
+    <router-view></router-view>
     <LoginModal />
     <SignupModal />
     <ActivationModal />
