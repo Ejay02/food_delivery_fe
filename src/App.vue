@@ -10,7 +10,6 @@ import ResetPasswordModal from "./components/modals/auth/resetPasswordModal.vue"
 import ForgotPasswordModal from "./components/modals/auth/forgotPasswordModal.vue";
 
 const userStore = useUserStore();
-console.log("userStore:", userStore.isAuthenticated);
 
 onMounted(() => {
   if (userStore.isAuthenticated) {

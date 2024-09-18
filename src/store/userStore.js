@@ -79,7 +79,7 @@ export const useUserStore = defineStore("user", {
 
     async refreshUser() {
       this.clearUser();
-      const { refetch } = await this.fetchUser();
+      const { refetch } = await this.fetchCurrentUser();
       await refetch();
     },
 

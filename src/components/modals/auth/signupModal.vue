@@ -95,7 +95,6 @@
         <div class="flex justify-center space-x-4 mt-2">
           <GoogleLogin
             :callback="callback"
-            popup-type="TOKEN"
             class="block w-full rounded-md shadow-sm"
           >
             <button class="text-white p-2 rounded-md hover:bg-slate-500">
@@ -125,9 +124,13 @@ import { computed, ref } from "vue";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
-import { registerMutation } from "../../../graphql/mutations";
+import {
+  googleLoginMutation,
+  registerMutation,
+} from "../../../graphql/mutations";
 import { useNotifications } from "../../../composables/globalAlert";
 import { useModalManagement } from "../../../utils/modalManagement";
+import { setCookie } from "@/utils/cookie";
 
 const userStore = useUserStore();
 
@@ -188,23 +191,38 @@ const switchToLogin = () => {
   openModal("login-modal");
 };
 
+const {
+  mutate: googleLogin,
+  error: googleError,
+  loading: googleLoading,
+} = useMutation(googleLoginMutation);
+
+// googleLoginMutation
 const callback = async (response) => {
   try {
-    console.log("Login with Gmail");
-    // This callback will be triggered when the user selects or login to
-    // his Google account from the popup
-    console.log("Handle the response", response);
+    const res = await googleLogin({
+      code: response.code,
+    });
 
-    // const accessToken = response.access_token;
+    if (res.data) {
+      userStore.setUser({
+        accessToken: res.data.googleLogin.accessToken,
+        refreshToken: res.data.googleLogin.refreshToken,
+        user: res.data.googleLogin.user,
+      });
 
-    // const res = await validateGoogleToken({
-    // 	googleOauthValidateInput: {
-    // 		accessToken: accessToken,
-    // 		inviteCode,
-    // 	},
-    // });
+      userStore.persistData();
+
+      // Set cookies
+      setCookie("access_token", res.data.googleLogin.accessToken, 7);
+      setCookie("refresh_token", res.data.googleLogin.refreshToken, 7);
+
+      notify("Login successful", "success");
+
+      closeModal("login-modal");
+    }
   } catch (error) {
-    console.log("error:", error);
+    notify(error.message, "error");
   }
 };
 </script>

@@ -67,7 +67,6 @@
             :callback="callback"
             class="block w-full rounded-md shadow-sm"
           >
-            <!-- popup-type="TOKEN" -->
             <button class="text-white p-2 rounded-md hover:bg-slate-500">
               <img src="/src/assets/google.jpg" class="w-4 h-4" />
             </button>

@@ -84,14 +84,12 @@
 </template>
 
 <script setup>
-import { eraseCookie } from "@/utils/cookie";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "@/store/userStore";
-import { useApolloClient, useMutation } from "@vue/apollo-composable";
 import { logoutMutation } from "@/graphql/mutations";
 import { useNotifications } from "@/composables/globalAlert";
 import { useModalManagement } from "../utils/modalManagement";
-import { googleLogout } from "vue3-google-login";
+import { useApolloClient, useMutation } from "@vue/apollo-composable";
 
 const { notify } = useNotifications();
 
@@ -117,11 +115,6 @@ const handleLogout = async () => {
 
     // Clear the user store
     userStore.clearUser();
-
-    // Logout from Google (if using Google auth)
-    // if (userStore.isGoogleUser) {
-    //   googleLogout();
-    // }
 
     notify("Logout successful", "success");
 
