@@ -6,7 +6,7 @@ View the live demo:
 
 - [Customer-facing site](https://quick-dash.netlify.app/)
 
-- [Restaurant Admin Dashboard](https://quick-dash-restaurant.netlify.app/)
+
 
 
 ## Features
@@ -70,7 +70,8 @@ Contributions to Quick Dash are welcome! Please feel free to create your branch,
 
 ## Related Projects
 
-Restaurant Admin Dashboard: A separate repository contains the admin dashboard for restaurant owners to manage their menus and orders.
+- [Restaurant Admin Dashboard](https://quick-dash-restaurant.netlify.app/): A separate repository containing the admin dashboard for restaurant owners to manage their menus and orders.
+
 
 ## License
 
