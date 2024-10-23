@@ -5,13 +5,13 @@ import router from "./router";
 import pinia from "./store";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
-import { apolloClient } from "../apollo-client";
-import { DefaultApolloClient } from "@vue/apollo-composable";
-import VueApolloComponents from "@vue/apollo-components";
 import vue3GoogleLogin from "vue3-google-login";
+import { apolloClient } from "../apollo-client";
 import { useUserStore } from "./store/userStore";
+import VueApolloComponents from "@vue/apollo-components";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { DefaultApolloClient } from "@vue/apollo-composable";
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faSun, faMoon);
 

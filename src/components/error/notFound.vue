@@ -7,7 +7,7 @@
     </div>
 
     <!--  -->
-    <router-link to="/">
+    <router-link to="/home">
       <div class="container mt-20">
         <div class="center">
           <button class="btn">

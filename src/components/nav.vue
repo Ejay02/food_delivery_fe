@@ -20,44 +20,50 @@
 
     <!-- Desktop menu -->
     <div
-      class="hidden md:flex px-5 text-[18px] font-[500] items-center justify-between"
+      class=" hidden md:flex px-5 text-[18px] font-[500] items-center justify-between"
     >
       <div
         v-for="(item, index) in navItems"
         :key="index"
-        :class="{ 'text-[#b637a5]': activeItem === index }"
+        :class="{ 'text-[#b637a5]': isActive(item.url) }"
         class="p-4"
       >
-        <a :href="item.url">{{ item.title }}</a>
+        <RouterLink :to="item.url">{{ item.title }}</RouterLink>
       </div>
     </div>
 
     <!-- Mobile menu dropdown -->
-    <div v-if="isMenuOpen" class="absolute top-full left-0 w-full md:hidden">
+    <div v-if="isMenuOpen" class="absolute top-full left-0 w-full md:hidden text-amber-500 text-lg">
       <div
         v-for="(item, index) in navItems"
         :key="index"
-        :class="{ 'text-[#b637a5]': activeItem === index }"
+        :class="{ 'text-[#b637a5]': isActive(item.url) }"
         class="p-4"
       >
-        <a :href="item.url" @click="closeMenu">{{ item.title }}</a>
+        <RouterLink :to="item.url" @click="closeMenu">{{
+          item.title
+        }}</RouterLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 
 const navItems = [
-  { title: "Home", url: "/" },
-  { title: "About Us", url: "/about" },
+  { title: "Home", url: "/home" },
   { title: "Restaurants", url: "/restaurants" },
   { title: "Popular Foods", url: "/foods" },
   { title: "Contact Us", url: "/contact" },
+  { title: "About Us", url: "/about" },
 ];
 
-const activeItem = ref(0);
+const route = useRoute();
+
+const isActive = (url) => route.path === url;
+
 const isMenuOpen = ref(false);
 
 const toggleMenu = () => {
@@ -69,6 +75,4 @@ const closeMenu = () => {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

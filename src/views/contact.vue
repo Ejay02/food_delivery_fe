@@ -1,7 +1,4 @@
 <template>
-  <!-- <div
-    class="flex justify-center items-center min-h-screen bg-gradient-to-r from-purple-400 via-indigo-600 to-purple-600"
-  > -->
   <div
     class="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-800 via-indigo-600 to-black"
   >
@@ -30,7 +27,7 @@
 
               <!-- github -->
               <a
-                href="https://github.com/Ejay02"
+                href="https://github.com/Ejay02?tab=repositories"
                 target="_blank"
                 class="social"
               >

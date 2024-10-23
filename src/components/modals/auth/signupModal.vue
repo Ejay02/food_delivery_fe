@@ -3,10 +3,10 @@
   <div
     v-if="isModalOpen('signup-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
-    @click.self="closeModal('signup-modal')"
   >
+    <!-- @click.self="closeModal('signup-modal')" -->
     <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
-      <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+      <h2 class="text-2xl font-bold mb-4 text-center">Sign Up</h2>
       <form @submit.prevent="" class="space-y-4">
         <!-- name -->
         <div>
@@ -22,7 +22,7 @@
             autofocus
             min="4"
             placeholder="Jane Smith"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            class="cursor-pointer w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
 
@@ -37,7 +37,7 @@
             v-model="email"
             required
             placeholder="hello@test.com"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            class="cursor-pointer w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
         <!-- password -->
@@ -52,7 +52,7 @@
             required
             placeholder="myPassword@#12$"
             minlength="8"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            class="cursor-pointer w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
 
@@ -67,7 +67,7 @@
             v-model="number"
             required
             placeholder="+001 234 5678"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            class="cursor-pointer w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
 
@@ -100,6 +100,8 @@
           </GoogleLogin>
         </div>
       </div>
+
+      <div class="border-b border-gray-300 border-opacity-10 mt-4"></div>
 
       <div class="mt-4 text-center text-sm">
         <p class="">
@@ -187,6 +189,7 @@ const handleSubmit = async () => {
 
 const switchToLogin = () => {
   closeModal("signup-modal");
+  resetForm();
   openModal("login-modal");
 };
 

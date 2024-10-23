@@ -2,10 +2,10 @@
   <LoadingScreen v-if="loading" />
 
   <div
-    v-if="isModalOpen('login-modal') && !loading && !error"
+    v-else-if="isModalOpen('login-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
-    @click.self="closeModal('login-modal')"
   >
+    <!-- @click.self="closeModal('login-modal')" -->
     <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
       <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
       <form @submit.prevent="" class="space-y-4">
@@ -20,22 +20,31 @@
             required
             autofocus
             placeholder="hello@test.com"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            class="cursor-pointer w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
         </div>
         <div>
           <label for="password" class="block mb-2 text-sm font-medium"
             >Password:</label
           >
-          <input
-            type="password"
-            id="password"
-            v-model="password"
-            required
-            placeholder="myPassword@#12$"
-            minlength="8"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-          />
+          <div class="relative">
+            <input
+              :type="showPassword ? 'text' : 'password'"
+              id="password"
+              v-model="password"
+              required
+              placeholder="myPassword@#12$"
+              minlength="8"
+              class="cursor-pointer w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            />
+            <button
+              type="button"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400"
+              @click="togglePasswordVisibility('password')"
+            >
+              <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
         </div>
 
         <div class="mt-6 text-sm text-end">
@@ -74,6 +83,8 @@
         </div>
       </div>
 
+      <div class="border-b border-gray-300 border-opacity-10 mt-4"></div>
+
       <div class="mt-4 text-center text-sm">
         <p class="">
           Need an account?
@@ -81,21 +92,18 @@
             href="#"
             @click="switchToSignup"
             class="text-blue-500 hover:underline"
-            >Sign up</a
+            >Sign Up</a
           >
         </p>
       </div>
     </div>
   </div>
-
-  <Error v-if="error || googleError" />
 </template>
 
 <script setup>
 import { setCookie } from "@/utils/cookie";
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import Error from "@/components/error/error.vue";
 import LoadingScreen from "../../loadingScreen.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { useUserStore } from "../../../store/userStore";
@@ -116,6 +124,14 @@ const email = ref("");
 const password = ref("");
 const verifyToken = ref("");
 
+const showPassword = ref(false);
+
+const togglePasswordVisibility = (field) => {
+  if (field === "password") {
+    showPassword.value = !showPassword.value;
+  }
+};
+
 const resetForm = () => {
   email.value = "";
   password.value = "";
@@ -126,7 +142,7 @@ const isFormValid = computed(() => {
   return email.value.trim() !== "" && password.value.trim() !== "";
 });
 
-const { mutate: login, error, loading } = useMutation(loginMutation);
+const { mutate: login, loading } = useMutation(loginMutation);
 
 const handleSubmit = async () => {
   try {
@@ -159,13 +175,14 @@ const handleSubmit = async () => {
       setCookie("refresh_token", refreshToken, 7);
 
       notify("Login successful", "success");
+      router.push("/home");
       resetForm();
       closeModal("login-modal");
 
       // Clean up URL if it contains reset password parameters
-      if (route.query.verify) {
-        router.replace({ path: "/" });
-      }
+      // if (route.query.verify) {
+      //   router.replace({ path: "/" });
+      // }
     }
   } catch (error) {
     notify(error.message, "error");

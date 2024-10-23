@@ -1,12 +1,14 @@
 import { ref, watch } from "vue";
 
 export function useDarkMode() {
-  const isDarkMode = ref(localStorage.getItem("darkMode") === "true");
+  const isDarkMode = ref(
+    localStorage.getItem("darkMode") === "false" ? false : true
+  );
 
   watch(
     isDarkMode,
     (val) => {
-      localStorage.setItem("darkMode", val);
+      localStorage.setItem("darkMode", val.toString());
       if (val) {
         document.documentElement.classList.add("dark");
       } else {

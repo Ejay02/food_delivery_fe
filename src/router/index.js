@@ -1,15 +1,16 @@
-import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/home.vue";
-import NotFound from "../components/error/notFound.vue";
-import ResetPasswordHandler from "../components/resetPasswordHandler.vue";
 import About from "@/views/about.vue";
 import Contact from "@/views/contact.vue";
+import AuthPage from "@/views/authPage.vue";
+import NotFound from "../components/error/notFound.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import ResetPasswordHandler from "../components/resetPasswordHandler.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "Auth",
+    component: AuthPage,
   },
   {
     path: "/reset-password",
@@ -17,14 +18,21 @@ const routes = [
     component: ResetPasswordHandler,
   },
   {
-    path: "/about",
-    name: "About",
-    component: About,
-  },
-  {
-    path: "/contact",
-    name: "Contact",
-    component: Contact,
+    path: "/home",
+    name: "Home",
+    component: Home,
+    children: [
+      {
+        path: "/about",
+        name: "About",
+        component: About,
+      },
+      {
+        path: "/contact",
+        name: "Contact",
+        component: Contact,
+      },
+    ],
   },
   {
     // path: "*",

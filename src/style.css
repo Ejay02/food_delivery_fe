@@ -5,4 +5,5 @@
 body {
   @apply h-screen overflow-hidden;
   font-family: 'Playfair Display', serif;
+  overflow: auto;
 }
