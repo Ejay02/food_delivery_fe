@@ -5,6 +5,7 @@ import { useDarkMode } from "./composables/useDarkMode";
 import { provideModalManagement } from "./utils/modalManagement";
 import LoginModal from "./components/modals/auth/loginModal.vue";
 import SignupModal from "./components/modals/auth/signupModal.vue";
+import ScrollToTopButton from "./components/scrollToTopButton.vue";
 import ActivationModal from "./components/modals/auth/activationModal.vue";
 import ResetPasswordModal from "./components/modals/auth/resetPasswordModal.vue";
 import ForgotPasswordModal from "./components/modals/auth/forgotPasswordModal.vue";
@@ -83,6 +84,7 @@ provideModalManagement();
     <ActivationModal />
     <ForgotPasswordModal />
     <ResetPasswordModal />
+    <ScrollToTopButton />
   </div>
 </template>
 
