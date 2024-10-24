@@ -70,7 +70,7 @@ provideModalManagement();
       </svg>
     </button>
 
-    <RouterLink to="/" class="fixed">
+    <RouterLink to="/home" class="fixed">
       <img
         class="w-10 h-10 object-cover rounded-sm text-center m-4"
         src="./assets/quick_dash.png"

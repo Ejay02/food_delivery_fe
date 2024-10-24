@@ -6,9 +6,7 @@
 </template>
 
 <script setup>
-import Header from '@/components/layout/header.vue';
-
-
+import Header from "@/components/layout/header.vue";
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

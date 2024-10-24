@@ -19,11 +19,14 @@
 
     <!-- Popular Categories Section -->
     <section class="mb-14">
-      <div class="flex items-center group">
-        <h2 class="text-3xl">Popular Categories</h2>
-        <ArrowIcon
-          class="mb-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        />
+      <div class="flex">
+        <div class="flex items-center group">
+          <h2 class="text-3xl">Popular Categories</h2>
+          <ArrowIcon
+            class="mb-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          />
+        </div>
+        <div class=""></div>
       </div>
       <div class="category-grid">
         <div
@@ -39,11 +42,14 @@
 
     <!-- Featured Restaurants -->
     <section class="mb-14">
-      <div class="flex items-center group">
-        <h2 class="text-3xl">Featured Restaurants</h2>
-        <ArrowIcon
-          class="mb-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        />
+      <div class="flex">
+        <div class="flex items-center group">
+          <h2 class="text-3xl">Featured Restaurants</h2>
+          <ArrowIcon
+            class="mb-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          />
+        </div>
+        <div class=""></div>
       </div>
       <div class="restaurant-grid">
         <div
@@ -85,9 +91,9 @@ import { ref } from "vue";
 const deliveryAddress = ref("");
 
 const categories = ref([
-  { id: 1, name: "Pizza", image: "https://picsum.photos/200/300" },
+  { id: 1, name: "Pizza", image: "https://baconmockup.com/200/300" },
   { id: 2, name: "Sushi", image: "https://picsum.photos/200/300" },
-  { id: 3, name: "Burgers", image: "https://picsum.photos/200/300" },
+  { id: 3, name: "Burgers", image: "https://baconmockup.com/200/300" },
   { id: 4, name: "Chinese", image: "https://picsum.photos/200/300" },
 ]);
 
@@ -143,6 +149,7 @@ const searchRestaurants = () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  cursor: pointer;
 }
 
 .hero-section {

@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import ResetPasswordHandler from "../components/resetPasswordHandler.vue";
 import Restaurants from "@/views/restaurants.vue";
 import Layout from "@/views/layout.vue";
+import PopularFoods from "@/views/popularFoods.vue";
 
 const routes = [
   {
@@ -33,6 +34,11 @@ const routes = [
         path: "/restaurants",
         name: "Restaurants",
         component: Restaurants,
+      },
+      {
+        path: "/popular-foods",
+        name: "PopularFoods",
+        component: PopularFoods,
       },
       {
         path: "/about",

@@ -55,7 +55,7 @@ import { useRoute } from "vue-router";
 const navItems = [
   { title: "Home", url: "/home" },
   { title: "Restaurants", url: "/restaurants" },
-  { title: "Popular Foods", url: "/foods" },
+  { title: "Popular Foods", url: "/popular-foods" },
   { title: "Contact Us", url: "/contact" },
   { title: "About Us", url: "/about" },
 ];
