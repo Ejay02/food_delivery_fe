@@ -333,3 +333,4 @@ const goToRestaurant = (id) => {
   --tw-ring-color: #ff4d4d;
 }
 </style>
+

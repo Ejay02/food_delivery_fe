@@ -1,12 +1,14 @@
 <template>
-  <div class="py-2 px-4 sm:px-6 lg:px-8 m-4">
-    <div class="">
-      <div>
-        <h1 class="text-4xl font-bold text-center mb-4 cursor-pointer">About Quick Dash</h1>
-      </div>
+  <div
+    class="flex min-h-screen bg-gradient-to-r from-gray-800 via-indigo-600 to-black"
+  >
+    <div class="py-2 px-4 sm:px-6 lg:px-8 m-4 ">
+      <h1 class="text-4xl font-bold text-center mb-4 cursor-pointer">
+        About Quick Dash
+      </h1>
 
-      <div class="text-black leading-relaxed cursor-pointer">
-        <div class="p-6 bg-gray-400 shadow-lg rounded-lg">
+      <div class="text-black leading-relaxed cursor-pointer ">
+        <div class="p-6 bg-sky-600 shadow-lg rounded-lg">
           <h2 class="text-2xl font-semibold mb-1">Our Story</h2>
           <p class="mb-8 p-2 text-xl font-thin">
             Quick Dash was born out of a simple idea: to make delicious food

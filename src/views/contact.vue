@@ -2,7 +2,7 @@
   <div
     class="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-800 via-indigo-600 to-black"
   >
-    <div class="rounded-lg shadow-lg overflow-hidden w-full max-w-4xl">
+    <div class="rounded-lg shadow-lg overflow-hidden w-full max-w-4xl mb-8">
       <div class="flex flex-col lg:flex-row">
         <!-- Left Container -->
         <div

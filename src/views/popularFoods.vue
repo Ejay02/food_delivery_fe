@@ -2,8 +2,13 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Popular Foods Section -->
     <section class="popular-foods-section mb-10">
-      <div class="flex items-center justify-between">
-        <h2 class="text-3xl">Popular Foods</h2>
+      <!-- <div class="flex items-center justify-between">
+        <h2 class="text-3xl"></h2>
+      </div> -->
+      <div>
+        <h1 class="text-4xl font-bold text-center m-4 cursor-pointer">
+          Popular Foods
+        </h1>
       </div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6"
