@@ -20,7 +20,7 @@
 
     <!-- Desktop menu -->
     <div
-      class=" hidden md:flex px-5 text-[18px] font-[500] items-center justify-between"
+      class="hidden md:flex px-5 text-[18px] font-[500] items-center justify-between"
     >
       <div
         v-for="(item, index) in navItems"
@@ -33,7 +33,10 @@
     </div>
 
     <!-- Mobile menu dropdown -->
-    <div v-if="isMenuOpen" class="absolute top-full left-0 w-full md:hidden text-amber-500 text-lg">
+    <div
+      v-if="isMenuOpen"
+      class="absolute top-full left-0 w-full md:hidden text-amber-500 text-lg z-50 font-bold"
+    >
       <div
         v-for="(item, index) in navItems"
         :key="index"

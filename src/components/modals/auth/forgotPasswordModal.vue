@@ -4,8 +4,8 @@
   <div
     v-if="isModalOpen('forgot-modal') && !loading && !error"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+    @click.self="closeModal('forgot-modal')"
   >
-    <!-- @click.self="closeModal('forgot-modal')" -->
     <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
       <h2 class="text-2xl font-bold mb-2 text-center">Forgot password?</h2>
       <h6 class="text-sm mb-6">

@@ -56,12 +56,12 @@
           </a-menu-item>
           <a-menu-item key="admin">
             <a
-              href="https://quick-dash-restaurant.netlify.app/"
+              href="https://quick-dash-restaurant.netlify.app"
               class="flex gap-3 items-center text-decoration-none text-slate-500"
             >
               <i class="fa-solid fa-hand-holding-dollar text-slate-500"></i>
               <!--  -->
-              <span>Restaurant Dashboard</span>
+              <span class="text-slate-500">Restaurant Dashboard</span>
             </a>
           </a-menu-item>
           <a-menu-item>

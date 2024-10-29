@@ -3,8 +3,8 @@
   <div
     v-if="isModalOpen('activation-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+    @click.self="closeModal('activation-modal')"
     >
-    <!-- @click.self="closeModal('activation-modal')" -->
     <div
       class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md"
       @click.stop

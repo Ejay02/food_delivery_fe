@@ -3,8 +3,8 @@
   <div
     v-if="isModalOpen('signup-modal')"
     class="fixed inset-0 bg-[#00000027] bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+    @click.self="closeModal('signup-modal')"
   >
-    <!-- @click.self="closeModal('signup-modal')" -->
     <div class="bg-slate-900 p-8 rounded-lg shadow-lg w-11/12 max-w-md">
       <h2 class="text-2xl font-bold mb-4 text-center">Sign Up</h2>
       <form @submit.prevent="" class="space-y-4">

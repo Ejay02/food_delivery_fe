@@ -1,19 +1,18 @@
 import Home from "../views/home.vue";
 import About from "@/views/about.vue";
+import Layout from "@/views/layout.vue";
 import Contact from "@/views/contact.vue";
-import AuthPage from "@/views/authPage.vue";
+import Restaurants from "@/views/restaurants.vue";
+import PopularFoods from "@/views/popularFoods.vue";
 import NotFound from "../components/error/notFound.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import ResetPasswordHandler from "../components/resetPasswordHandler.vue";
-import Restaurants from "@/views/restaurants.vue";
-import Layout from "@/views/layout.vue";
-import PopularFoods from "@/views/popularFoods.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Auth",
-    component: AuthPage,
+    name: "Layout",
+    component: Layout,
   },
   {
     path: "/reset-password",
@@ -21,37 +20,31 @@ const routes = [
     component: ResetPasswordHandler,
   },
   {
-    path: "/layout",
-    name: "Layout",
-    component: Layout,
-    children: [
-      {
-        path: "/home",
-        name: "Home",
-        component: Home,
-      },
-      {
-        path: "/restaurants",
-        name: "Restaurants",
-        component: Restaurants,
-      },
-      {
-        path: "/popular-foods",
-        name: "PopularFoods",
-        component: PopularFoods,
-      },
-      {
-        path: "/about",
-        name: "About",
-        component: About,
-      },
-      {
-        path: "/contact",
-        name: "Contact",
-        component: Contact,
-      },
-    ],
+    path: "/home",
+    name: "Home",
+    component: Home,
   },
+  {
+    path: "/restaurants",
+    name: "Restaurants",
+    component: Restaurants,
+  },
+  {
+    path: "/popular-foods",
+    name: "PopularFoods",
+    component: PopularFoods,
+  },
+  {
+    path: "/about",
+    name: "About",
+    component: About,
+  },
+  {
+    path: "/contact",
+    name: "Contact",
+    component: Contact,
+  },
+
   {
     // path: "*",
     path: "/:catchAll(.*)",
